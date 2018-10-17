@@ -1,0 +1,20 @@
+<div class="col-xs-12">
+    <div class="header">
+        <span>{{list.title}} - {{list.desc}}</span>
+    </div>
+    <div class="" *ngFor="let todo of todos">
+        <span>
+            {{todo.title}} - {{todo.desc}}
+            <button type="button" title="delete todo" (click)="delete(todo)" name="button">X</button>
+        </span>
+    </div>
+    <div class="">
+        <label>
+            Todo title: <input [(ngModel)]="todo.title" placeholder="title"/>
+        </label>
+        <label>
+            Todo description: <input [(ngModel)]="todo.desc" placeholder="description"/>
+        </label>
+        <button type="btn btn-primary" (click)="add(todo)" name="button">Save</button>
+    </div>
+</div>
