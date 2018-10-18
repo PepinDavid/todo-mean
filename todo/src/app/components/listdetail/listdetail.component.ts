@@ -43,7 +43,7 @@ export class ListdetailComponent implements OnInit {
           this.todos = todos.obj;
       })
   }
-  add(td: ToDo){
+  add(td: ToDo): void{
       if(!td.title.trim()){return;}
       if(!td.desc.trim()){return;}
       this.todo = td;
@@ -54,7 +54,15 @@ export class ListdetailComponent implements OnInit {
           this.todos.push(t.obj);
         });
   }
-  delete(td: ToDo){
+  update(td: ToDo): void{
+      console.log(td)
+      if(td.status)
+        td.status = false;
+      else
+        td.status = true;
+    this.todoSVC.editTodo(this.list._id, td).subscribe();
+  }
+  delete(td: ToDo): void{
       let id = this.list._id;
       this.todos = this.todos.filter(t=> t !== td);
       this.todoSVC.deleteTodo(id, td).subscribe();

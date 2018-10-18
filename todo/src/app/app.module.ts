@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+ 
 //components angular
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
