@@ -25,17 +25,18 @@ export class DashboardComponent implements OnInit {
                 l.sort((a,b)=>{
                     let modA = new Date(a.modifiedAt);
                     let modB = new Date(b.modifiedAt);
-                    console.log(modA)
-                    modA = modA.getFullYear()+zeroDebut(modA.getMonth()+1,2)+zeroDebut(modA.getDate(),2);
-                    modB = modB.getFullYear()+zeroDebut(modB.getMonth()+1,2)+zeroDebut(modB.getDate(),2);
-                    console.log(modA)
-                    console.log(modB)
+                    modA = dateToString(modA);
+                    modB = dateToString(modB);
                     return  modA < modB;
                 });
                 this.lists = l;
             }
         });
   }
+}
+
+function dateToString(date){
+    return date.getFullYear()+zeroDebut(date.getMonth()+1,2)+zeroDebut(date.getDate(),2);
 }
 
 function zeroDebut (val, taille) {

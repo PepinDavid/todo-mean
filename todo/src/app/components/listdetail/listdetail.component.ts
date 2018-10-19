@@ -17,6 +17,8 @@ export class ListdetailComponent implements OnInit {
   list: ListTodo;
   todos: ToDo[] = [];
   selectedTodo: ToDo;
+  dbclick = false;
+  elementClicked = "";
   constructor(
       private route: ActivatedRoute,
       private listSVC: ListtodoService,
@@ -34,13 +36,20 @@ export class ListdetailComponent implements OnInit {
   getList(){
       const id = this.route.snapshot.paramMap.get("listId");
       this.listSVC.getList(id).subscribe((list)=>{
-          this.list = list.obj[0];
+          if(list.hasOwnProperty('obj'))
+            this.list = list.obj[0];
       });
   }
   getTodos(){
       const id = this.route.snapshot.paramMap.get("listId");
       this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos)=>{
-          this.todos = todos.obj;
+          if(todos.hasOwnProperty('obj')){
+              this.obj = todos.obj.map((o)=>{
+                  o.classTitle = o.title.trim().split(" ").join("-")
+                  o.classDesc = o.desc.trim().split(" ").join("-")
+              });
+              this.todos = todos.obj;
+          }
       })
   }
   add(td: ToDo): void{
@@ -52,19 +61,36 @@ export class ListdetailComponent implements OnInit {
       this.todoSVC.createTodo(id, this.todo)
         .subscribe((t)=>{
           this.todos.push(t.obj);
+          td.title = "";
+          td.desc = "";
         });
   }
   update(td: ToDo): void{
-      console.log(td)
       if(td.status)
         td.status = false;
       else
         td.status = true;
-    this.todoSVC.editTodo(this.list._id, td).subscribe();
+    this.todoSVC.editTodo(this.list._id, td)
+        .subscribe((t) =>{
+        });
   }
   delete(td: ToDo): void{
       let id = this.list._id;
       this.todos = this.todos.filter(t=> t !== td);
       this.todoSVC.deleteTodo(id, td).subscribe();
+  }
+
+  //events
+  updateCell(e, td: ToDo): void{
+      let el = e.path[0];
+      if(e.keyCode == 13){
+          if($(el).attr("class").indexOf("todoTitle") > -1){
+              td.title = el.innerText;
+              this.todoSVC.editTodo(this.list._id, td).subscribe(t => console.log(t));
+          }else{
+              td.desc = el.innerText;
+              this.todoSVC.editTodo(this.list._id, td).subscribe(t => console.log(t));
+          }
+      }
   }
 }

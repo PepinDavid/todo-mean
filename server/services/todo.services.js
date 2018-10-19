@@ -52,6 +52,7 @@ exports.updateTodo = async function(todo){
         }
         oldTodo.modifiedAt = new Date();
         var updatedTodo = await oldTodo.save();
+        return updatedTodo;
     }catch(e){
         throw Error("Error when updated todo");
     }
@@ -74,7 +75,7 @@ exports.deleteTodoIdList = async function(id){
         var removedTodo = await ToDo.deleteOne({idList: id});
         if(removedTodo.n === 0)
             throw Error("Todo could not be deleted")
-        return removedTodo
+        return removedTodo;
     }catch(e){
         throw Error("Error occured while deleted todo");
     }

@@ -55,11 +55,12 @@ exports.createListTodo = async function(req, res, next){
 }
 
 exports.updateListTodo = async function(req, res, next){
-    var id = req.params.listId;
+    var id = req.params.listId || req.body._id;
     if(!id)
         return res.status(400).json(ERROR("Error: _id not defined"));
     var b = req.body;
     var list = {
+        _id: id,
         title: b.title,
         desc: b.desc,
         status: b.status,
