@@ -1,20 +1,35 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var bluebird = require('bluebird')
+//handle error http
+const createError = require('http-errors');
+//framework expressJS
+const express = require('express');
+//handle de original path where saved app
+const path = require('path');
+//hanlde client-cookies and parse/pipe in req
+const cookieParser = require('cookie-parser');
+//handle req multipart/form-data content-type
+const busboy = require('connect-busboy');
+//for dev
+const logger = require('morgan');
+//framework for connect/access mongoDB
+const mongoose = require('mongoose');
+const bluebird = require('bluebird');
+//create/get session server variable
+const session = require('express-session');
+//mongoStore use for
+const MongoStore = require('connect-mongo')(session);
+//for accept cross origin resource sharing
+const cors = require('cors');
+//router
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const apiRouter  = require('./routes/api.route');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var apiRouter  = require('./routes/api.route');
-var app = express();
-
-var mongoose = require('mongoose')
 mongoose.Promise = bluebird
 mongoose.connect('mongodb://127.0.0.1:27017/my_todo', { useNewUrlParser: true })
     .then(()=> { console.log(`Succesfully Connected to the Mongodb Database  at URL : mongodb://127.0.0.1:27017/my_todo`)})
     .catch(()=> { console.log(`Error Connecting to the Mongodb Database at URL : mongodb://127.0.0.1:27017/my_todo`)});
+
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,20 +37,47 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(busboy());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  next();
-});
+//use this under for cors
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   next();
+// });
+//or use this one
+app.use(cors({
+    origin: "http://localhost:4200",
+    optionsSuccessStatus: 200,
+    credentials: true
+}));
 
+app.use(session({
+    key: 'user_sid',
+    secret: 'test auth',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
+    }),
+    cookie: {
+        //for prod mode
+        // secure: true,
+        // expires: 60000
+    }
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+
+app.use((req, res, next)=>{
+    if(req.cookies.user_sid && ! req.session.user)
+        res.clearCookie('user_sid');
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

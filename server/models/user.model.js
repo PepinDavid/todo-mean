@@ -42,5 +42,9 @@ UserSchema.pre('save', function(next){
     });
 });
 
+UserSchema.methods.comparePwd = function(pwd){
+    return bcrypt.compareSync(pwd, this.password);
+}
+
 const User = mongoose.model('Users', UserSchema);
 module.exports = User;

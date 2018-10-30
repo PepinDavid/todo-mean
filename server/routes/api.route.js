@@ -1,10 +1,15 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var ListTodoRoute = require('./api/listtodo.route');
-var TodoRoute = require('./api/todo.route');
-
+const ListTodoRoute = require('./api/listtodo.route');
+const TodoRoute = require('./api/todo.route');
+const UserRoute = require('./api/user.route');
+const FilesRoute = require('./api/files.route');
+const CollecFilesRoute = require('./api/collecFiles.route');
 router.use('/lists', ListTodoRoute);
 router.use('/todos', TodoRoute);
+router.use('/user', UserRoute);
+router.use('/files', FilesRoute);
+router.use('/collecfiles', CollecFilesRoute);
 
 module.exports = router;

@@ -8,7 +8,11 @@ var ToDoSchema = new mongoose.Schema({
     status: Boolean,
     user: String,
     modifiedAt: Date,
-    idList: String
+    idList: String,
+    files: {
+        type: Array,
+        required: false
+    }
 });
 
 ToDoSchema.plugin(mongoosePagination);
