@@ -41,7 +41,10 @@ exports.loginUser = async function(req, res, next){
     };
     try{
         var loggin = await userSvc.loginUser(user);
-        return res.status(200).json({status: 200, obj: loggin, message: "Sucessfully loaded users"});
+        req.session.userId = loggin._id;
+        req.session.userUsername = loggin.username;
+        console.log(req.session)
+        return res.status(200).json({status: 200, obj: true, message: "Sucessfully loaded users"});
     }catch(e){
         return res.status(400).json(ERROR(e));
     }
@@ -53,7 +56,7 @@ exports.createUser = async function(req, res, next){
         email: b.email,
         username: b.username,
         name: b.name,
-        surname: b.name,
+        surname: b.surname,
         password: b.password
     };
     try{

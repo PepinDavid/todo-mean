@@ -3,18 +3,24 @@ var bcrypt = require('bcrypt');
 
 exports.loginUser = async function(user){
     try {
-        var query = {} {
-            email: user.email
+        var query = {
+            username: user.username
+            // $or: [
+            //     {email: user.username},
+            //     {username: user.username},
+            // ]
+
         }
-        var u = await User.find(query);
+        var u = await User.findOne(query);
         if(!u)
             throw Error("User not exists")
-        var compare = await bcryt.compare(user.password, u.password);
+        var compare = await bcrypt.compare(user.password, u.password);
         if(compare === true){
             delete u.password;
             return u;
-        }else
+        }else{
             throw Error("password is not correct");
+        }
     }catch(e){
         throw Error("Error occured while logged in User");
     }
@@ -43,11 +49,11 @@ exports.createUser = async function(user){
         name: user.name,
         surname: user.surname,
         username: user.username,
+        password: user.password,
         createdAt: new Date(),
         modifiedAt: new Date(),
         admin: false
     });
-
     try{
         var userSaved = await newUser.save();
         return userSaved;

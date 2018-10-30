@@ -11,7 +11,11 @@ let storage = GridFsStorage({
     gfs: ()=>{return Grid(mongoose.connection.db, mongoose.mongo);},
     file: (req, file, cb)=>{
         if(!req.params.todoId)
+<<<<<<< HEAD
             cb(null)
+=======
+            return cb(null)
+>>>>>>> testMultipleGridFSSolution
         let f = {
             filename: file.originalname.split('.')[0]+"_"+Date.now()+"."+file.originalname.split('.')[1],
             bucketName: "gfsFile",
@@ -24,9 +28,16 @@ let storage = GridFsStorage({
                 todoId: req.params.todoId
             }
         };
+<<<<<<< HEAD
 
         cb(null, f);
     }
+=======
+        console.log(f)
+        return cb(null, f);
+    },
+    root: "gfsFile"
+>>>>>>> testMultipleGridFSSolution
 });
 
 var collecFile = multer({storage:storage});

@@ -11,7 +11,7 @@ function ERROR(e){
 
 exports.getListsTodo = async function(req, res, next){
     var page = req.body.page || 1;
-    var limit = req.body.limit || 10
+    var limit = req.body.limit || 10;
     try{
         var lists = await ListTodoSvc.getListTodo({}, page, limit);
         return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
