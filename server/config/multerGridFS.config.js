@@ -9,35 +9,23 @@ const multer = require('multer');
 let storage = GridFsStorage({
     url: dbUrl,
     gfs: ()=>{return Grid(mongoose.connection.db, mongoose.mongo);},
-    file: (req, file, cb)=>{
+    file: (req, file)=>{
         if(!req.params.todoId)
-<<<<<<< HEAD
-            cb(null)
-=======
-            return cb(null)
->>>>>>> testMultipleGridFSSolution
+            return null;
         let f = {
             filename: file.originalname.split('.')[0]+"_"+Date.now()+"."+file.originalname.split('.')[1],
             bucketName: "gfsFile",
             uploadDate: Date.now(),
             metadata: {
-                name: file.originalname,
+                originalname: file.originalname,
                 mimetype: file.mimetype,
                 encoding: file.encoding,
                 fieldname: file.fieldname,
                 todoId: req.params.todoId
             }
         };
-<<<<<<< HEAD
-
-        cb(null, f);
+        return f;
     }
-=======
-        console.log(f)
-        return cb(null, f);
-    },
-    root: "gfsFile"
->>>>>>> testMultipleGridFSSolution
 });
 
 var collecFile = multer({storage:storage});

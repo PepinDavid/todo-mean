@@ -6,8 +6,6 @@ const express = require('express');
 const path = require('path');
 //hanlde client-cookies and parse/pipe in req
 const cookieParser = require('cookie-parser');
-//handle req multipart/form-data content-type
-const busboy = require('connect-busboy');
 //for dev
 const logger = require('morgan');
 //framework for connect/access mongoDB
@@ -38,7 +36,6 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(busboy());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //use this under for cors

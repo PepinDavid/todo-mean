@@ -18,7 +18,6 @@ exports.getTodos = async function(req, res, next){
         filter.idList = listId;
     try{
         var todos = await ToDoSvc.getTodos(filter, page, limit);
-
         return res.status(200).json({status: 200, obj: todos, message: "Sucessfully loaded todos"});
     }catch(e){
         return res.status(400).json(ERROR(e));
@@ -36,7 +35,7 @@ exports.getTodo = async function(req, res, next){
     try{
         var todos = await ToDoSvc.getTodos(filter, page, limit);
 
-        return res.status(200).json({status: 200, obj: todos, message: "Sucessfully loaded todos"});
+        return res.status(200).json({status: 200, todos, message: "Sucessfully loaded todos"});
     }catch(e){
         return res.status(400).json(ERROR(e));
     }

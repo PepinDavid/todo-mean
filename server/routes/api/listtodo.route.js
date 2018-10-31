@@ -1,6 +1,5 @@
 var express = require('express');
 var ListTodoRoute = express.Router();
-var auth = require('../../config/auth');
 var ListTodoCtrl = require('../../controllers/listtodo.controller');
 var TodoRouter = require('./todo.route');
 var mid = require('../../controllers/middleware.controller')
