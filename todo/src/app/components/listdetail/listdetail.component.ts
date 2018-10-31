@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import * as $ from 'jquery';
 
 import ListTodo from '../../models/listtodo.model';
 import { ListtodoService } from '../../services/listtodo.service';
@@ -35,18 +36,19 @@ export class ListdetailComponent implements OnInit {
   }
   getList(){
       const id = this.route.snapshot.paramMap.get("listId");
-      this.listSVC.getList(id).subscribe((list)=>{
+      this.listSVC.getList(id).subscribe((list: any)=>{
           if(list.hasOwnProperty('obj'))
             this.list = list.obj[0];
       });
   }
   getTodos(){
       const id = this.route.snapshot.paramMap.get("listId");
-      this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos)=>{
+      this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos: any)=>{
           if(todos.hasOwnProperty('obj')){
-              this.obj = todos.obj.map((o)=>{
+              todos.obj = todos.obj.map((o)=>{
                   o.classTitle = o.title.trim().split(" ").join("-")
                   o.classDesc = o.desc.trim().split(" ").join("-")
+                  return o;
               });
               this.todos = todos.obj;
           }
@@ -59,7 +61,7 @@ export class ListdetailComponent implements OnInit {
       let id = this.list._id;
       this.todo.idList = id;
       this.todoSVC.createTodo(id, this.todo)
-        .subscribe((t)=>{
+        .subscribe((t: any)=>{
           this.todos.push(t.obj);
           td.title = "";
           td.desc = "";
@@ -71,7 +73,7 @@ export class ListdetailComponent implements OnInit {
       else
         td.status = true;
     this.todoSVC.editTodo(this.list._id, td)
-        .subscribe((t) =>{
+        .subscribe((t: any) =>{
         });
   }
   delete(td: ToDo): void{

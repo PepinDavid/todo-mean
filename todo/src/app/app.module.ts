@@ -1,9 +1,8 @@
 //angular core
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
- 
 //components angular
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -11,11 +10,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { TodoService } from './services/todo.service';
 import { ListtodoService } from './services/listtodo.service';
 import { MessagesService } from './services/messages.service';
+import { UploadService } from './services/upload.service';
 //components created
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ListtodoComponent } from './components/listtodo/listtodo.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ListdetailComponent } from './components/listdetail/listdetail.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { UploadComponent } from './components/upload/upload.component';
+import { ListcourseComponent } from './components/listcourse/listcourse.component';
+import { CoursesComponent } from './components/courses/courses.component';
 
 @NgModule({
   declarations: [
@@ -23,13 +28,19 @@ import { ListdetailComponent } from './components/listdetail/listdetail.componen
     MessagesComponent,
     DashboardComponent,
     ListtodoComponent,
-    ListdetailComponent
+    ListdetailComponent,
+    LoginComponent,
+    RegisterComponent,
+    UploadComponent,
+    ListcourseComponent,
+    CoursesComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     ListtodoService,

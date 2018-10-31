@@ -10,8 +10,9 @@ import { MessagesService } from './messages.service';
 import ListTodo from '../models/listtodo.model';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+    headers: new HttpHeaders({ 'Content-Type': 'application/json'}),
+    withCredentials: true
+}
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +49,6 @@ export class ListtodoService {
       )
   }
   getList(id: string): Observable<ListTodo>{
-      console.log(id)
       const url = this.listTodoUrl+"/"+id;
       return this.http.get<ListTodo>(url, httpOptions).pipe(
           tap( _ => this.log("get List todo id: "+id)),

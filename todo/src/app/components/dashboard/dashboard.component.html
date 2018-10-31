@@ -1,8 +1,22 @@
-<h3>Top Listes Todo</h3>
-<div class="grid grid-pad">
-  <a *ngFor="let list of lists" class="col-1-4" routerLink="/lists/{{list._id}}">
-    <div class="module list">
-      <h4>{{list.title}}</h4>
+<div class="col-xs-12">
+    <div class="col-xs-4 text-left">
+        <h3>Listes de cours</h3>
+        <div class="grid grid-pad">
+            <a *ngFor="let list of listsCourse" class="col-1-4" routerLink="/listscourse/{{list._id}}">
+                <div class="module list">
+                    <h4>{{list.title}} - {{list.desc}}</h4>
+                </div>
+            </a>
+        </div>
     </div>
-  </a>
+    <div class="col-xs-8">
+        <h3>Top Listes Todo</h3>
+        <div class="grid grid-pad">
+            <a *ngFor="let list of lists" class="col-1-4" routerLink="/lists/{{list._id}}">
+                <div class="module list">
+                    <h4>{{list.title}} - {{list.desc}}</h4>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>

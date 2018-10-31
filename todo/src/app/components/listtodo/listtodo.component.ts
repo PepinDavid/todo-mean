@@ -24,7 +24,7 @@ export class ListtodoComponent implements OnInit {
 
   getLists():void {
       this.listSVC.getAllLists("from listtodo component")
-        .subscribe((list)=>{if(list.hasOwnProperty("obj"))this.lists = list.obj}); 
+        .subscribe((list: any)=>{if(list.hasOwnProperty("obj"))this.lists = list.obj});
   }
  updateListTodo(l: ListTodo): void{
      if(l.status)
@@ -45,7 +45,7 @@ export class ListtodoComponent implements OnInit {
       this.list.title = titre;
       this.list.desc = descr;
       this.listSVC.addList(this.list)
-        .subscribe( list => {
+        .subscribe( (list: any) => {
             this.lists.push(list.obj);
         });
   }

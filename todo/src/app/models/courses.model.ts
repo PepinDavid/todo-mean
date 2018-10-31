@@ -1,11 +1,10 @@
-class ToDo {
+class Course {
     _id: string;
     title: string;
     desc: string;
-    idList: string;
+    idListCourse: string;
     createdAt: Date;
     modifiedAt: Date;
-    status: boolean;
     user: string;
     files: Array<string>;
 
@@ -14,11 +13,10 @@ class ToDo {
         this.desc = "";
         this.createdAt = new Date();
         this.modifiedAt = new Date();
-        this.status = false;
-        this.idList = "";
+        this.idListCourse = "";
         this.user = "poney";
         this.files = [];
     }
 }
 
-export default ToDo;
+export default Course;

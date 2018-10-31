@@ -1,6 +1,6 @@
 <div class="col-xs-12">
     <div class="text-left">
-        <h3>Liste Details: {{list.title}}</h3>
+        <h3>Liste Details: {{list.title}} - {{list.desc}}</h3>
     </div>
     <table class="table table-bordered">
         <tr class="table-header ">
@@ -9,7 +9,7 @@
             <td class="text-left col-xs-1">Fait ?</td>
             <td class="text-left col-xs-1"></td>
         </tr>
-        <ng-template ngFor let-todo [ngForOf]="todos" #trTodo>
+        <ng-template ngFor let-todo [ngForOf]="todos">
             <tr *ngIf="!todo.status">
                 <td  contenteditable='true' (keypress)="updateCell($event, todo)" class="text-left col-xs-4 todoTitle">{{todo.title}}</td>
                 <td contenteditable='true' (keypress)="updateCell($event, todo)" class="text-left col-xs-6 todoDesc">{{todo.desc}}</td>
@@ -32,8 +32,8 @@
         </div>
         <div class="form-group">
             <label>Description Todo:</label>
-            <input class="form-control" [(ngModel)]="todo.desc" placeholder="description"/>
+            <textarea class="form-control" [(ngModel)]="todo.desc" rows="5" cols="50"></textarea>
         </div>
-        <button type="btn btn-primary" (click)="add(todo)" name="button">Ajouter</button>
+        <button class="btn btn-primary" (click)="add(todo)" name="button">Ajouter</button>
     </div>
 </div>

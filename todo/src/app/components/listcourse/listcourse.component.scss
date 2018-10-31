@@ -1,0 +1,24 @@
+.border {
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+.encart {
+    margin: 20px 0;
+}
+.card, .card-max {
+    max-height: 300px;
+}
+.encart-border {
+    margin: 0 40px;
+    border-radius: 5px;
+    border-color: #969696;
+    border: 2px solid;
+}
+.encart-grey-graph {
+    padding: 3px 0;
+    margin: -10px 0 10px;
+    color: #fff;
+    font-weight: 700!important;
+    background-color: #8099b2;
+    font-size: 14px;
+}

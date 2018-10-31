@@ -1,0 +1,40 @@
+<div class="clo-xs-12 encart">
+    <div class="col-xs-12">
+        <button class="btn btn-success" (click)="formVisible()">Show/Hide form</button>
+    </div>
+    <div class="row" *ngIf="!isVisible">
+        <div class="" *ngIf="listsCourseLength()">
+            <div class="col-xs-4 col-sm-3 col-md-2 encart border card" *ngFor="let list of listsCourse" >
+                <div class="encart-border encart-grey-graph text-center">
+                    {{list.title}}
+                </div>
+                <div class="text-center">
+                    {{list.desc}}
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-primary" routerLink="/listscourses/{{list._id}}">Détails</a>
+                    <button class="btn btn-danger" (click)="delete(list)">Remove</button>
+                </div>
+            </div>
+        </div>
+        <div class="" *ngIf="!listsCourseLength()">
+            <div class="col-xs-12 text-center">
+                <h3>Pas de cours !</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 encart border" *ngIf="isVisible">
+        <legend>Ajouter d'une liste</legend>
+        <div class="form-group">
+            <label>Titre liste:</label>
+            <input class="form-control" [(ngModel)]="listInp.title" placeholder="title" />
+        </div>
+        <div class="form-group">
+            <label>Description liste:</label>
+            <input class="form-control" [(ngModel)]="listInp.desc" placeholder="description" />
+        </div>
+        <button class="btn btn-primary" (click)="add(listInp)">
+            Ajouter
+        </button>
+    </div>
+</div>

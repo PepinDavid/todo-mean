@@ -10,8 +10,9 @@ import { MessagesService } from './messages.service';
 import ToDo from '../models/todo.model';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+    headers: new HttpHeaders({ 'Content-Type': 'application/json'}),
+    withCredentials: true
+}
 
 @Injectable()
 export class TodoService {
@@ -59,7 +60,7 @@ export class TodoService {
     if (id)
       url += "/" + id + "/todos";
     return this.http.get<ToDo[]>(url, httpOptions).pipe(
-      tap(todo => this.log("Fetched ToDos idList: "+id)),
+      tap( _ => this.log("Fetched ToDos idList: "+id)),
       catchError(this.handleError<ToDo[]>('getTodosListId', []))
     )
   }

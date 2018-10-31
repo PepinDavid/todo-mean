@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ListtodoService } from '../../services/listtodo.service';
+import { ListcourseService } from '../../services/listcourse.service';
 import  ListTodo from '../../models/listtodo.model';
+import  ListCourse from '../../models/listcourse.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,22 +11,25 @@ import  ListTodo from '../../models/listtodo.model';
 })
 export class DashboardComponent implements OnInit {
   lists: ListTodo[] = [];
+  listCourse: ListCourse[] = [];
+
   constructor(
-      private listSVC: ListtodoService
+      private listSVC: ListtodoService,
+      private listCourseSVC: ListcourseService
   ) { }
 
   ngOnInit() {
       this.getAllLists();
+      this.getListCourse();
   }
   getAllLists(): void{
-      console.log(this.lists)
       this.listSVC.getAllLists("from dashboard")
-        .subscribe((list)=>{
+        .subscribe((list: any)=>{
             if(list.hasOwnProperty("obj")){
                 let l = list.obj;
                 l.sort((a,b)=>{
-                    let modA = new Date(a.modifiedAt);
-                    let modB = new Date(b.modifiedAt);
+                    let modA: any = new Date(a.modifiedAt);
+                    let modB: any = new Date(b.modifiedAt);
                     modA = dateToString(modA);
                     modB = dateToString(modB);
                     return  modA < modB;
@@ -33,9 +38,19 @@ export class DashboardComponent implements OnInit {
             }
         });
   }
+  getListCourse(): void{
+      this.listCourseSVC.getAllListsCourse("from dashboard")
+        .subscribe((listCourse: any)=>{
+            if(listCourse.hasOwnProperty("obj"))
+            listCourse.obj.forEach((obj)=>{
+                if(this.listCourse.length < 5)
+                    this.listCourse.push(obj);
+            });
+        });
+  }
 }
 
-function dateToString(date){
+function dateToString(date: any){
     return date.getFullYear()+zeroDebut(date.getMonth()+1,2)+zeroDebut(date.getDate(),2);
 }
 

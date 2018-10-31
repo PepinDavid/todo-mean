@@ -9,6 +9,7 @@ class ListTodo{
 
     constructor(){
         this.title = "";
+        this.desc = "";
         this.createdAt = new Date();
         this.modifiedAt = new Date();
         this.user = "poney";
