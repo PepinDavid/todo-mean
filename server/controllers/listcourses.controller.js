@@ -1,5 +1,5 @@
 var ListCourseSvc = require ('../services/listcourses.services');
-
+var getToken = require('../config/auth.config');
 var _this = this;
 
 function ERROR(e){
@@ -12,23 +12,33 @@ function ERROR(e){
 exports.getListsCourse = async function(req, res, next){
     var page = req.body.page || 1;
     var limit = req.body.limit || 10;
-    try{
-        var lists = await ListCourseSvc.getListCourse({}, page, limit);
-        return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
-    }catch(e){
-        return res.status(400).json(ERROR(e))
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var lists = await ListCourseSvc.getListCourse({}, page, limit);
+            return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
+        }catch(e){
+            return res.status(400).json(ERROR(e))
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
 exports.getListCourse = async function(req, res, next){
     var page = req.body.page || 1;
     var limit = req.body.limit || 10;
-    try{
-        var lists = await ListCourseSvc.getListCourse({_id: req.params.listCoursesId}, page, limit);
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var lists = await ListCourseSvc.getListCourse({_id: req.params.listCoursesId}, page, limit);
 
-        return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
-    }catch(e){
-        return res.status(400).json(ERROR(e))
+            return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
+        }catch(e){
+            return res.status(400).json(ERROR(e))
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
@@ -42,14 +52,18 @@ exports.createListCourse = async function(req, res, next){
     var list = {
         title: b.title,
         desc: b.desc,
-        user: "poney"
+        user: req.session.userUsername
     }
-
-    try{
-        var created = await ListCourseSvc.createListCourse(list);
-        return res.status(200).json({status: 200, obj: created, message: "Success created List todo"});
-    }catch(e){
-        return res.status(400).json(ERROR(e))
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var created = await ListCourseSvc.createListCourse(list);
+            return res.status(200).json({status: 200, obj: created, message: "Success created List todo"});
+        }catch(e){
+            return res.status(400).json(ERROR(e))
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
@@ -62,13 +76,18 @@ exports.updateListCourse = async function(req, res, next){
         _id: id,
         title: b.title,
         desc: b.desc,
-        user: "poney"
+        user: req.session.userUsername
     };
-    try{
-        var updated = await ListCourseSvc.updateListCourse(list);
-        return res.status(200).json({status: 200, obj: updated, message: "Successfully updated list"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var updated = await ListCourseSvc.updateListCourse(list);
+            return res.status(200).json({status: 200, obj: updated, message: "Successfully updated list"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
@@ -76,10 +95,15 @@ exports.deleteListCourse = async function(req, res, next){
     var id = req.params.listCoursesId;
     if(!id)
         return res.status(400).json(ERROR("Error: _id not defined"));
-    try{
-        var removed = await ListCourseSvc.deleteListCourse(id);
-        return res.status(200).json({status: 200, obj: removed, message: "Successfully removed list"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var removed = await ListCourseSvc.deleteListCourse(id);
+            return res.status(200).json({status: 200, obj: removed, message: "Successfully removed list"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }

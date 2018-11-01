@@ -7,7 +7,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { MessagesService } from './messages.service';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' }),
+  headers: new HttpHeaders({
+      'Content-Type': 'multipart/form-data',
+      'Authorization': localStorage.getItem('Token')
+  }),
   withCredentials: true,
   reportProgress: true
 }

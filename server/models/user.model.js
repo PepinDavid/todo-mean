@@ -34,12 +34,16 @@ var UserSchema = new mongoose.Schema({
 //pre-save password bcrypt
 UserSchema.pre('save', function(next){
     var user = this;
-    bcrypt.hash(user.password, 10, function(err, hash){
-        if(err)
-            return next(err);
-        user.password = hash;
-        next();
-    });
+    if(this.isModified || this.isNew){
+        bcrypt.hash(user.password, 10, function(err, hash){
+            if(err)
+                return next(err);
+            user.password = hash;
+            next();
+        });
+    }else{
+        return next();
+    }
 });
 
 UserSchema.methods.comparePwd = function(pwd){

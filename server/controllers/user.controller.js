@@ -1,4 +1,8 @@
 var userSvc = require('../services/user.services');
+var passport = require('passport');
+var config = require('../config/db.config');
+var getToken = require('../config/auth.config');
+var jwt = require('jsonwebtoken');
 
 var _this = this;
 
@@ -12,12 +16,16 @@ function ERROR(e){
 exports.getUsers = async function(req, res, next){
     var page = req.body.page || 1;
     var limit = req.body.limit || 10;
-
-    try{
-        var users = await userSvc.getTodos({}, page, limit);
-        return res.status(200).json({status: 200, obj: users, message: "Sucessfully loaded users"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var users = await userSvc.getTodos({}, page, limit);
+            return res.status(200).json({status: 200, obj: users, message: "Sucessfully loaded users"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 };
 
@@ -25,11 +33,16 @@ exports.getUser = async function(req, res, next){
     var page = req.body.page || 1;
     var limit = req.body.limit || 10;
     var filter = {};
-    try{
-        var users = await userSvc.getTodos(filter, page, limit);
-        return res.status(200).json({status: 200, obj: users, message: "Sucessfully loaded users"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var users = await userSvc.getTodos(filter, page, limit);
+            return res.status(200).json({status: 200, obj: users, message: "Sucessfully loaded users"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 };
 
@@ -40,11 +53,11 @@ exports.loginUser = async function(req, res, next){
         password: b.password
     };
     try{
-        var loggin = await userSvc.loginUser(user);
-        req.session.userId = loggin._id;
-        req.session.userUsername = loggin.username;
-        console.log(req.session)
-        return res.status(200).json({status: 200, obj: true, message: "Sucessfully loaded users"});
+        var user = await userSvc.loginUser(user);
+        var token = jwt.sign(user.toJSON(), config.secret);
+        req.session.userId = user._id;
+        req.session.userUsername = user.username;
+        return res.status(200).json({status: 200, token: 'jwt '+token, message: "Sucessfully loaded users"});
     }catch(e){
         return res.status(400).json(ERROR(e));
     }
@@ -59,11 +72,19 @@ exports.createUser = async function(req, res, next){
         surname: b.surname,
         password: b.password
     };
-    try{
-        var created = await userSvc.createUser(user);
-        return res.status(200).json({status: 200, obj: created, message: "Sucessfully loaded users"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var created = await userSvc.createUser(user);
+            var token = jwt.sign(created.toJSON(), config.secret);
+            req.session.userId = user._id;
+            req.session.userUsername = user.username;
+            return res.status(200).json({status: 200, token: 'jwt :'+token, message: "Sucessfully loaded users"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 };
 
@@ -77,11 +98,16 @@ exports.updateUser = async function(req, res, next){
         surname: req.body.surname,
         email: req.body.email
     };
-    try{
-        var updated = await userSvc.updateUser(user);
-        return res.status(204).json({status: 204, obj: updated, message: "Successfully updated user"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var updated = await userSvc.updateUser(user);
+            return res.status(204).json({status: 204, obj: updated, message: "Successfully updated user"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 };
 
@@ -89,10 +115,15 @@ exports.deleteUser = async function(req, res, next){
     var id = req.body.id;
     if(!id)
         return res.status(400).json(ERROR("Error: _id not defined"));
-    try{
-        var deleted = await userSvc.deleteUser(id);
-        return res.status(204).json({status: 204, message: "Successfully deleted user"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var deleted = await userSvc.deleteUser(id);
+            return res.status(204).json({status: 204, message: "Successfully deleted user"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 };

@@ -27,7 +27,6 @@ exports.createTodo = async function(todo){
     });
     try{
         var savedToDo =  await newToDo.save();
-        console.log(savedToDo)
         return savedToDo;
     }catch(e){
         throw Error("Error when created todo");
@@ -61,7 +60,6 @@ exports.updateTodo = async function(todo){
 exports.deleteTodo = async function(id){
     try{
         var removedTodo = await ToDo.deleteOne({_id: id});
-        console.log(removedTodo)
         if(removedTodo.n === 0)
             throw Error("Todo could not be deleted")
         return removedTodo

@@ -5,18 +5,12 @@ exports.loginUser = async function(user){
     try {
         var query = {
             username: user.username
-            // $or: [
-            //     {email: user.username},
-            //     {username: user.username},
-            // ]
-
         }
         var u = await User.findOne(query);
         if(!u)
             throw Error("User not exists")
         var compare = await bcrypt.compare(user.password, u.password);
         if(compare === true){
-            delete u.password;
             return u;
         }else{
             throw Error("password is not correct");
@@ -33,10 +27,6 @@ exports.getUsers = async function(query, page, limit){
     }
     try {
         var users = await User.find(query, {}, options);
-        users = users.map((u)=>{
-            delete u.password;
-            return u;
-        });
         return users;
     }catch(e){
         throw Error("Error occured while logged in User");

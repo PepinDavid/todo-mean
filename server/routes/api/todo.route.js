@@ -1,12 +1,12 @@
 var express = require('express');
+var passport = require('passport');
 var TodoRouter = express.Router({mergeParams: true});
-var mid = require('../../controllers/middleware.controller');
 var ToDoCtrl = require('../../controllers/todo.controller');
 
-TodoRouter.get("/", mid.requiresLogin, ToDoCtrl.getTodos)
-        .get("/:id", mid.requiresLogin, ToDoCtrl.getTodos)
-        .post("/", mid.requiresLogin, ToDoCtrl.createTodo)
-        .put("/", mid.requiresLogin, ToDoCtrl.updateTodo)
-        .delete("/:id", mid.requiresLogin, ToDoCtrl.deleteTodo);
+TodoRouter.get("/", passport.authenticate('jwt', { session: false}), ToDoCtrl.getTodos)
+        .get("/:id", passport.authenticate('jwt', { session: false}), ToDoCtrl.getTodos)
+        .post("/", passport.authenticate('jwt', { session: false}), ToDoCtrl.createTodo)
+        .put("/", passport.authenticate('jwt', { session: false}), ToDoCtrl.updateTodo)
+        .delete("/:id", passport.authenticate('jwt', { session: false}), ToDoCtrl.deleteTodo);
 
 module.exports = TodoRouter;

@@ -1,5 +1,5 @@
 var ListTodoSvc = require ('../services/listtodo.services');
-
+var getToken = require('../config/auth.config');
 var _this = this;
 
 function ERROR(e){
@@ -12,23 +12,33 @@ function ERROR(e){
 exports.getListsTodo = async function(req, res, next){
     var page = req.body.page || 1;
     var limit = req.body.limit || 10;
-    try{
-        var lists = await ListTodoSvc.getListTodo({}, page, limit);
-        return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
-    }catch(e){
-        return res.status(400).json(ERROR(e))
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var lists = await ListTodoSvc.getListTodo({}, page, limit);
+            return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
+        }catch(e){
+            return res.status(400).json(ERROR(e))
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
 exports.getListTodo = async function(req, res, next){
     var page = req.body.page || 1;
     var limit = req.body.limit || 10;
-    try{
-        var lists = await ListTodoSvc.getListTodo({_id: req.params.listId}, page, limit);
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var lists = await ListTodoSvc.getListTodo({_id: req.params.listId}, page, limit);
 
-        return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
-    }catch(e){
-        return res.status(400).json(ERROR(e))
+            return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
+        }catch(e){
+            return res.status(400).json(ERROR(e))
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
@@ -45,12 +55,16 @@ exports.createListTodo = async function(req, res, next){
         status: b.status,
         user: "poney"
     }
-
-    try{
-        var created = await ListTodoSvc.createListTodo(list);
-        return res.status(200).json({status: 200, obj: created, message: "Success created List todo"});
-    }catch(e){
-        return res.status(400).json(ERROR(e))
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var created = await ListTodoSvc.createListTodo(list);
+            return res.status(200).json({status: 200, obj: created, message: "Success created List todo"});
+        }catch(e){
+            return res.status(400).json(ERROR(e))
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
@@ -64,13 +78,18 @@ exports.updateListTodo = async function(req, res, next){
         title: b.title,
         desc: b.desc,
         status: b.status,
-        user: "poney"
+        user: req.session.userUsername
     };
-    try{
-        var updated = await ListTodoSvc.updateListTodo(list);
-        return res.status(200).json({status: 200, obj: updated, message: "Successfully updated list"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var updated = await ListTodoSvc.updateListTodo(list);
+            return res.status(200).json({status: 200, obj: updated, message: "Successfully updated list"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }
 
@@ -78,10 +97,15 @@ exports.deleteListTodo = async function(req, res, next){
     var id = req.params.listId;
     if(!id)
         return res.status(400).json(ERROR("Error: _id not defined"));
-    try{
-        var removed = await ListTodoSvc.deleteListTodo(id);
-        return res.status(200).json({status: 200, obj: removed, message: "Successfully removed list"});
-    }catch(e){
-        return res.status(400).json(ERROR(e));
+    var token = getToken(req.headers);
+    if(token){
+        try{
+            var removed = await ListTodoSvc.deleteListTodo(id);
+            return res.status(200).json({status: 200, obj: removed, message: "Successfully removed list"});
+        }catch(e){
+            return res.status(400).json(ERROR(e));
+        }
+    }else{
+        return res.status(403).json({status: 403, message: "Unauthorized"});
     }
 }

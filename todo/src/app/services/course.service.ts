@@ -9,7 +9,10 @@ import { MessagesService } from './messages.service';
 import Course from '../models/courses.model';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'}),
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('Token')
+    }),
     withCredentials: true
 };
 

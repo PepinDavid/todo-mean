@@ -17,13 +17,18 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 //for accept cross origin resource sharing
 const cors = require('cors');
+//for authentication
+const passport = require('passport');
+require('./config/passport.config')(passport);
 //router
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const apiRouter  = require('./routes/api.route');
 
+const config = require('./config/db.config');
+
 mongoose.Promise = bluebird
-mongoose.connect('mongodb://127.0.0.1:27017/my_todo', { useNewUrlParser: true })
+mongoose.connect(config.db, { useNewUrlParser: true })
     .then(()=> { console.log(`Succesfully Connected to the Mongodb Database  at URL : mongodb://127.0.0.1:27017/my_todo`)})
     .catch(()=> { console.log(`Error Connecting to the Mongodb Database at URL : mongodb://127.0.0.1:27017/my_todo`)});
 
@@ -38,14 +43,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-//use this under for cors
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   next();
-// });
-//or use this one
+app.use(passport.initialize());
 app.use(cors({
     origin: "http://localhost:4200",
     optionsSuccessStatus: 200,

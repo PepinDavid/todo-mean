@@ -10,6 +10,7 @@ import { UserService } from '../../services/user.service';
 })
 export class LoginComponent implements OnInit {
   @Input() user: User;
+  data: any;
   constructor(
       private userSVC: UserService
   ) { }
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   }
   login(user: User):void{
       this.userSVC.login(user).subscribe((u)=>{
-         console.log(u);
+          this.data = u;
+         localStorage.setItem('Token', this.data.token);
       });
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { Observable, of } from 'rxjs'; //like Promise or CallBack;
 import { catchError, map, tap } from 'rxjs/operators';
+
 //without "Observable", "Service" is synchronously but in real app, service
 //must use a connection to a BDD server so this one is asynchronous
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -10,7 +10,10 @@ import { MessagesService } from './messages.service';
 import User from '../models/user.model';
 
 const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json'}),
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('Token')
+    }),
     withCredentials: true
 }
 @Injectable({
