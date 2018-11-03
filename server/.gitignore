@@ -1,2 +1,2 @@
-nodes_modules/
-
+#dependancies
+/nodes_modules
