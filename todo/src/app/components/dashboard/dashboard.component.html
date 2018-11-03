@@ -1,12 +1,20 @@
 <div class="col-xs-12">
     <div class="col-xs-4 text-left">
         <h3>Listes de cours</h3>
-        <div class="grid grid-pad">
+        <div class="grid grid-pad" *ngIf="listsCourseLength()">
             <a *ngFor="let list of listsCourse" class="col-1-4" routerLink="/listscourse/{{list._id}}">
                 <div class="module list">
                     <h4>{{list.title}} - {{list.desc}}</h4>
                 </div>
             </a>
+        </div>
+        <div class="grid grid-pad" *ngIf="!listsCourseLength()">
+            <div class="col-xs-12 text-center">
+                <h3>Pas de cours !</h3>
+                <h3>
+                    <a routerLink="/listscourses">Créer un cours</a>
+                </h3>
+            </div>
         </div>
     </div>
     <div class="col-xs-8">

@@ -17,13 +17,17 @@
         <thead>
           <tr>
             <th>File Name</th>
+            <th>Id todo</th>
             <th>Link</th>
+            <th>Remove</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let file of filesList">
             <td>{{ file.originalname }}</td>
+            <td>{{ file.metadata.todoId }}</td>
             <td><button class="btn btn-primary button" (click)="download(file.id, file.contentType, file.originalname)">Download</button></td>
+            <td><button class="btn btn-danger button" (click)="remove(file.id)">Remove</button></td>
           </tr>
         </tbody>
       </table>

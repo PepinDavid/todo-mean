@@ -36,6 +36,7 @@ export class UploadService {
       return of(result as T);
     };
   }
+  // upload file to mongodb with a metadata todoId
   uploadTodoFile(files: File, todoId: string): Observable<any> {
     let formData: FormData = new FormData();
     let url: string = this.fileUrl+"/upload/"+todoId;
@@ -46,6 +47,7 @@ export class UploadService {
         catchError(this.handleError<null>("upload"))
     );
   }
+  // upload file to mongodb
   uploadFile(files: File): Observable<any> {
     let formData: FormData = new FormData();
     let url: string = this.fileUrl+"/upload/";
@@ -56,14 +58,44 @@ export class UploadService {
         catchError(this.handleError<null>("upload"))
     );
   }
+  // get file with is id
   getFile(fileId: string): Observable<any> {
-      return this.http.get(this.fileUrl+"/"+fileId);
+      return this.http.get(this.fileUrl+"/"+fileId, {headers: new HttpHeaders()}).pipe(
+          tap( _ => this.log("file gets ")),
+          catchError(this.handleError<null>("getFile"))
+      );
   }
+  //get all files
   getFiles(): Observable<any> {
-      return this.http.get(this.fileUrl);
+      return this.http.get(this.fileUrl, {headers: new HttpHeaders()}).pipe(
+          tap( _ => this.log("files get")),
+          catchError(this.handleError<null>("getFiles"))
+      );
   }
+  //get All files belongs to todo
+  getFilesByTodo(todoId: string): Observable<any>{
+      return this.http.get(this.fileUrl+"/todo/"+todoId, {headers: new HttpHeaders()}).pipe(
+          tap( _ => this.log("files get by todo")),
+          catchError(this.handleError<null>("getFilesByTodo"))
+      );
+  }
+  //download file with is id
   downloadFile(id: string): Observable<any>{
       return this.http.get(this.fileUrl+"/download/"+id,
       { responseType: 'blob' });
+  }
+  //remove all files how contain in todoId
+  removeAllFilesByTodo(todoId: string){
+      return this.http.post(this.fileUrl+"/todo/"+todoId, {headers: new HttpHeaders()}).pipe(
+          tap( _ => this.log("file removed")),
+          catchError(this.handleError<null>("removeFileByTodo"))
+      );
+  }
+  //remove one file with his id
+  removeFile(fileId: string){
+      return this.http.post(this.fileUrl+"/"+fileId, {headers: new HttpHeaders()}).pipe(
+          tap( _ => this.log("file removed")),
+          catchError(this.handleError<null>("removeFileByTodo"))
+      );
   }
 }

@@ -12,7 +12,9 @@ let storage = GridFsStorage({
     file: (req, file)=>{
         if(!req.params.todoId)
             return null;
+        var id = mongoose.Types.ObjectId();
         let f = {
+            id: id,
             filename: file.originalname.split('.')[0]+"_"+Date.now()+"."+file.originalname.split('.')[1],
             bucketName: "gfsFile",
             uploadDate: Date.now(),
@@ -24,6 +26,8 @@ let storage = GridFsStorage({
                 todoId: req.params.todoId
             }
         };
+        console.log(id.toString())
+        req.fileId = id.toString();
         return f;
     }
 });

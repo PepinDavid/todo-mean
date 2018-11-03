@@ -16,10 +16,11 @@
             </ul>
             <ul class="nav navbar-nav navbar-top-links navbar-right">
                 <li class="nav-item"><a class="nav-link" routerLink="/">Home</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/upload">upload (test)</a></li>
-                <li class="nav-item"><a class="nav-link" routerLink="/lists">Lists todo</a></li>
+                <li *ngIf="!isLogin()" class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
+                <li *ngIf="isLogin()" class="nav-item"><button class="logout" (click)="logout()" >Logout</button></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/lists">Listes des todo</a></li>
                 <li class="nav-item"><a class="nav-link" routerLink="/listscourses">Listes des cours</a></li>
+                <li class="nav-item"><a class="nav-link" routerLink="/upload">Fichier</a></li>
             </ul>
         </div>
     </div>

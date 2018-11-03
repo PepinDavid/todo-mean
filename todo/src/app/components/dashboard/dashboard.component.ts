@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ListtodoService } from '../../services/listtodo.service';
 import { ListcourseService } from '../../services/listcourse.service';
 import  ListTodo from '../../models/listtodo.model';
@@ -15,10 +16,12 @@ export class DashboardComponent implements OnInit {
 
   constructor(
       private listSVC: ListtodoService,
-      private listCourseSVC: ListcourseService
+      private listCourseSVC: ListcourseService,
+      private router: Router
   ) { }
 
   ngOnInit() {
+      this.isLogin();
       this.getAllLists();
       this.getListCourse();
   }
@@ -47,6 +50,13 @@ export class DashboardComponent implements OnInit {
                     this.listCourse.push(obj);
             });
         });
+  }
+  isLogin(){
+      if(localStorage.getItem('Token') == null)
+        this.router.navigate(['login']);
+  }
+  listsCourseLength(){
+      return this.listCourse.length > 0
   }
 }
 

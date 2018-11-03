@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import { Router } from '@angular/router';
 import User from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
@@ -12,16 +12,24 @@ export class LoginComponent implements OnInit {
   @Input() user: User;
   data: any;
   constructor(
-      private userSVC: UserService
+      private userSVC: UserService,
+      private router: Router
   ) { }
 
   ngOnInit() {
+      this.isLogin();
       this.user = new User();
   }
   login(user: User):void{
       this.userSVC.login(user).subscribe((u)=>{
-          this.data = u;
-         localStorage.setItem('Token', this.data.token);
+          if(u != undefined){
+              this.data = u;
+              localStorage.setItem('Token', this.data.token);
+          }
       });
+  }
+  isLogin(){
+      if(localStorage.getItem('Token') != null)
+        this.router.navigate(['dashboard']);
   }
 }

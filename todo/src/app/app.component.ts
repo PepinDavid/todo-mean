@@ -1,5 +1,5 @@
 import { Response } from '@angular/http';
-import { ListtodoService } from './services/listtodo.service';
+import { Router } from '@angular/router';
 import ListTodo from './models/listtodo.model';
 import { Component, OnInit } from '@angular/core';
 
@@ -9,21 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-
   constructor(
-    private listService: ListtodoService
+    private router: Router
   ) { }
 
-  lists: ListTodo[];
-
   ngOnInit(): void {
-    // this.listService.getAllLists("from DB")
-    //   .subscribe(list => {
-    //     this.lists = list.obj
-    // });
   }
-
-
-
+  isLogin(){
+      return (localStorage.getItem('Token') == null)?
+        false:true;
+  }
+  logout(){
+     localStorage.removeItem('Token');
+     this.router.navigate(['login']);
+  }
   title = 'My Todo';
 }

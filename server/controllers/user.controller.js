@@ -52,6 +52,7 @@ exports.loginUser = async function(req, res, next){
         username: b.username,
         password: b.password
     };
+    console.log(user)
     try{
         var user = await userSvc.loginUser(user);
         var token = jwt.sign(user.toJSON(), config.secret);

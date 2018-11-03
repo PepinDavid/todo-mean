@@ -37,12 +37,13 @@ exports.getTodo = async function(req, res, next){
     if(listId)
         filter.idList = listId;
     filter._id = req.params.id;
+    console.log(filter)
     var token = getToken(req.headers);
     if(token){
         try{
             var todos = await ToDoSvc.getTodos(filter, page, limit);
 
-            return res.status(200).json({status: 200, todos, message: "Sucessfully loaded todos"});
+            return res.status(200).json({status: 200, obj: todos, message: "Sucessfully loaded todos"});
         }catch(e){
             return res.status(400).json(ERROR(e));
         }
@@ -83,6 +84,7 @@ exports.updateTodo = async function(req, res, next){
         title: b.title,
         desc: b.desc,
         status: b.status,
+        files: b.files,
         user: req.session.userUsername
     };
     var token = getToken(req.headers);

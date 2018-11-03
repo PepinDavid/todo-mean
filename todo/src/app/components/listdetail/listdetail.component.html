@@ -4,25 +4,22 @@
     </div>
     <table class="table table-bordered">
         <tr class="table-header ">
-            <td class="text-left col-xs-4"><h4>Titre</h4></td>
+            <td class="text-left col-xs-2"><h4>Titre</h4></td>
             <td class="text-left col-xs-6"><h4>Description</h4></td>
+            <td class="text-left col-xs-2">Fichier</td>
             <td class="text-left col-xs-1">Fait ?</td>
             <td class="text-left col-xs-1"></td>
         </tr>
-        <ng-template ngFor let-todo [ngForOf]="todos">
-            <tr *ngIf="!todo.status">
-                <td  contenteditable='true' (keypress)="updateCell($event, todo)" class="text-left col-xs-4 todoTitle">{{todo.title}}</td>
-                <td contenteditable='true' (keypress)="updateCell($event, todo)" class="text-left col-xs-6 todoDesc">{{todo.desc}}</td>
-                <td class="text-center col-xs-1"> <input type="checkbox" [checked]="todo.status" (change)="update(todo)" ></td>
-                <td class="text-center col-xs-1"><button class="btn btn-danger" title="delete" (click)="delete(todo)">Supprimer</button></td>
-            </tr>
-            <tr *ngIf="todo.status">
-                <td contenteditable='true' (keypress)="updateCell($event, todo)" class="text-left col-xs-4 todo-done todoTitle">{{todo.title}}</td>
-                <td contenteditable='true' (keypress)="updateCell($event, todo)" class="text-left col-xs-6 todo-done todoDesc">{{todo.desc}}</td>
-                <td class="text-center col-xs-1 todo-done"> <input type="checkbox" [checked]="todo.status" (change)="update(todo)" ></td>
-                <td class="text-center col-xs-1 todo-done"><button class="btn btn-danger" title="delete" (click)="delete(todo)">Supprimer</button></td>
-            </tr>
-        </ng-template>
+        <tr *ngFor="let todo of todos">
+            <td contenteditable='true' (keypress)="updateCell($event, todo)" [ngClass]="{'todo-done': todo.status == true}" class="text-left col-xs-2 todoTitle">{{todo.title}}</td>
+            <td contenteditable='true' (keypress)="updateCell($event, todo)" [ngClass]="{'todo-done': todo.status == true}" class="text-left col-xs-6 todoDesc">{{todo.desc}}</td>
+            <td class="text-left col-xs-2 todo-done" [ngClass]="{'todo-done': todo.status == true}" >
+                <a *ngIf="todo.files?.length" class="btn btn-success" routerLink="/lists/{{todo.idList}}/todo/{{todo._id}}">Voir les fichiers</a>
+                <a *ngIf="!todo.files?.length" class="btn btn-success" routerLink="/lists/{{todo.idList}}/todo/{{todo._id}}">Pas des fichiers, clic pour ajouter</a>
+            </td>
+            <td class="text-center col-xs-1" [ngClass]="{'todo-done': todo.status == true}" ><input type="checkbox" [checked]="todo.status" (change)="updateCheckBox(todo)" ></td>
+            <td class="text-center col-xs-1" [ngClass]="{'todo-done': todo.status == true}" ><button class="btn btn-danger" title="delete" (click)="delete(todo)">Supprimer</button></td>
+        </tr>
     </table>
     <div>
         <legend>Ajouter d'une tâche</legend>

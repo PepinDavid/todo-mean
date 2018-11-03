@@ -7,6 +7,7 @@ class Course {
     modifiedAt: Date;
     user: string;
     files: Array<string>;
+    filesOriginal: Array<Object>;
 
     constructor(){
         this.title = "";

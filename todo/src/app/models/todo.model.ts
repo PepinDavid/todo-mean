@@ -8,6 +8,7 @@ class ToDo {
     status: boolean;
     user: string;
     files: Array<string>;
+    filesOriginal: Array<Object>;
 
     constructor(){
         this.title = "";

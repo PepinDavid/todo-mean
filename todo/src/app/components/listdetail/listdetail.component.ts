@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import * as $ from 'jquery';
-
 import ListTodo from '../../models/listtodo.model';
 import { ListtodoService } from '../../services/listtodo.service';
 import ToDo from '../../models/todo.model';
 import { TodoService } from '../../services/todo.service';
+import { UploadService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-listdetail',
@@ -20,11 +20,15 @@ export class ListdetailComponent implements OnInit {
   selectedTodo: ToDo;
   dbclick = false;
   elementClicked = "";
+  selectedFiles: FileList;
+  currentFileUpload: File;
+  filesList: Array<Object> = [];
   constructor(
       private route: ActivatedRoute,
       private listSVC: ListtodoService,
       private todoSVC: TodoService,
-      private location: Location
+      private location: Location,
+      public uploadSVC: UploadService
   ) { }
 
   ngOnInit() {
@@ -45,7 +49,7 @@ export class ListdetailComponent implements OnInit {
       const id = this.route.snapshot.paramMap.get("listId");
       this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos: any)=>{
           if(todos.hasOwnProperty('obj')){
-              todos.obj = todos.obj.map((o)=>{
+              todos.obj.forEach((o)=>{
                   o.classTitle = o.title.trim().split(" ").join("-")
                   o.classDesc = o.desc.trim().split(" ").join("-")
                   return o;
@@ -67,13 +71,19 @@ export class ListdetailComponent implements OnInit {
           td.desc = "";
         });
   }
-  update(td: ToDo): void{
+  updateCheckBox(td: ToDo): void{
       if(td.status)
         td.status = false;
       else
         td.status = true;
     this.todoSVC.editTodo(this.list._id, td)
         .subscribe((t: any) =>{
+        });
+  }
+  updateTodo(td: ToDo): void{
+    this.todoSVC.editTodo(this.list._id, td)
+        .subscribe((t: any) =>{
+            console.log(t)
         });
   }
   delete(td: ToDo): void{

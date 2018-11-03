@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ListtodoComponent } from './components/listtodo/listtodo.component';
 import { ListdetailComponent } from './components/listdetail/listdetail.component';
+import { TododetailComponent } from './components/tododetail/tododetail.component';
 import { ListcourseComponent } from './components/listcourse/listcourse.component';
 import { CoursesComponent } from './components/courses/courses.component';
 //users
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path: 'dashboard', component: DashboardComponent},
     {path: 'lists', component: ListtodoComponent},
     {path: 'lists/:listId', component: ListdetailComponent},
+    {path: 'lists/:listId/todo/:todoId', component: TododetailComponent},
     {path: 'listscourses', component: ListcourseComponent},
     {path: 'listscourses/:listCourseId', component: CoursesComponent},
 ]

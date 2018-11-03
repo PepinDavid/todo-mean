@@ -21,6 +21,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { ListcourseComponent } from './components/listcourse/listcourse.component';
 import { CoursesComponent } from './components/courses/courses.component';
+import { TododetailComponent } from './components/tododetail/tododetail.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { CoursesComponent } from './components/courses/courses.component';
     RegisterComponent,
     UploadComponent,
     ListcourseComponent,
-    CoursesComponent
+    CoursesComponent,
+    TododetailComponent
   ],
   imports: [
     BrowserModule,
