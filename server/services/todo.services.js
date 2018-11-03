@@ -35,6 +35,7 @@ exports.createTodo = async function(todo){
 
 exports.updateTodo = async function(todo){
     var id = todo._id;
+    console.log("service todo update : "+id)
     try{
         var oldTodo = await ToDo.findById(id);
     }catch(e){

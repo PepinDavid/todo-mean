@@ -1,6 +1,7 @@
+const mongoose = require('mongoose');
+const gridCollection = require('../config/db.config').gridFS;
 let collecFile = require('../config/multerGridFS.config');
 let fs = require('fs');
-const mongoose = require('mongoose');
 let Grid = require('gridfs-stream');
 let ToDo = require('../models/todo.model');
 
@@ -16,6 +17,15 @@ function ERROR(e) {
             message: e.message
         };
 }
+function removeChunks(connexion, id, response){
+    connection.collection(gridCollection+".chunks", function (error, collection) {
+        if(error)response.status(400).json(ERROR("Connexion to "+gridCollection+".chunks failed"));
+        collection.removeMany({files_id: id}, function(err, respCollec){
+            if(err) response.status(400).json(ERROR("Remove file failed"));
+            response.status(200).json({status: 200, message: "Successfully remove file"});
+        });
+   });
+}
 
 exports.downloadFile = function(req, res, next) {
     if(!req.params.fileId)
@@ -23,14 +33,14 @@ exports.downloadFile = function(req, res, next) {
     var db = mongoose.connection.db;
     var mongoDriver = mongoose.mongo;
     var gfs = new Grid(db, mongoDriver);
-    gfs.collection('gfsFile');
+    gfs.collection(gridCollection);
     let id = mongoose.Types.ObjectId(req.params.fileId);
     gfs.files.find({_id: id}).toArray((err, files)=>{
         if(!files || files.length < 1)
             return res.status(404).json({status: 404, message: "Error, None files"});
         var readstream = gfs.createReadStream({
             filename: files[0].filename,
-            root: "gfsFile"
+            root: gridCollection
         });
         res.set('Content-Type', files[0].contentType);
 
@@ -46,7 +56,7 @@ exports.getFilesByTodo = function(req, res, next) {
     var gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
-    gfs.collection("gfsFile")
+    gfs.collection(gridCollection);
     let id = req.params.todoId;
     console.log("idTodo : "+id)
     gfs.files.find({"metadata.todoId": id}).toArray((err, files)=>{
@@ -71,7 +81,7 @@ exports.getFiles = function(req, res, next){
     var gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
-    gfs.collection("gfsFile")
+    gfs.collection(gridCollection);
     gfs.files.find().toArray((err, files)=>{
         if(!files || files.length < 1)
             return res.status(404).json({status: 404, message: "Error, None files"});
@@ -108,7 +118,7 @@ exports.removeAllFilesByTodo = function(req, res, next){
     var gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
-    gfs.collection("gfsFile")
+    gfs.collection(gridCollection);
     let id = req.params.todoId;
     gfs.files.remove({"metadata.todoId": id}, function (err, gridStore) {
         if(err){
@@ -128,14 +138,10 @@ exports.removeFile = function(req, res, next){
     var gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
-    gfs.collection("gfsFile")
+    gfs.collection(gridCollection)
     let id = mongoose.Types.ObjectId(req.params.fileId);
     gfs.files.remove({_id: id}, function (err, gridStore) {
-        if(err){
-            console.log(err)
-            res.status(400).json(ERROR("Remove file failed"));
-            return;
-        }
-        res.status(200).json({status: 200, message: "Successfully remove file"});
+        if(err) res.status(400).json(ERROR("Remove file failed"));
+
     });
 }

@@ -3,10 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import * as $ from 'jquery';
 import ListTodo from '../../models/listtodo.model';
-import { ListtodoService } from '../../services/listtodo.service';
 import ToDo from '../../models/todo.model';
+import { ListtodoService } from '../../services/listtodo.service';
 import { TodoService } from '../../services/todo.service';
-import { UploadService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-listdetail',
@@ -20,20 +19,16 @@ export class ListdetailComponent implements OnInit {
   selectedTodo: ToDo;
   dbclick = false;
   elementClicked = "";
-  selectedFiles: FileList;
-  currentFileUpload: File;
-  filesList: Array<Object> = [];
   constructor(
       private route: ActivatedRoute,
       private listSVC: ListtodoService,
       private todoSVC: TodoService,
-      private location: Location,
-      public uploadSVC: UploadService
+      private location: Location
   ) { }
 
   ngOnInit() {
       this.list = new ListTodo();
-      this.todos = [new ToDo()];
+      this.todos = [];
       this.todo = new ToDo();
       this.getList();
       this.getTodos();
@@ -48,14 +43,8 @@ export class ListdetailComponent implements OnInit {
   getTodos(){
       const id = this.route.snapshot.paramMap.get("listId");
       this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos: any)=>{
-          if(todos.hasOwnProperty('obj')){
-              todos.obj.forEach((o)=>{
-                  o.classTitle = o.title.trim().split(" ").join("-")
-                  o.classDesc = o.desc.trim().split(" ").join("-")
-                  return o;
-              });
+          if(todos.hasOwnProperty('obj'))
               this.todos = todos.obj;
-          }
       })
   }
   add(td: ToDo): void{

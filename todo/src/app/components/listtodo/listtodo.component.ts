@@ -12,7 +12,7 @@ export class ListtodoComponent implements OnInit {
   @Input() list: ListTodo;
   lists: ListTodo[] = [];
   selectedList: ListTodo;
-
+  isVisible: boolean = false;
   constructor(
       private listSVC: ListtodoService
   ) { }
@@ -21,7 +21,12 @@ export class ListtodoComponent implements OnInit {
       this.list = new ListTodo();
       this.getLists();
   }
-
+  formVisible(){
+      if(this.isVisible)
+        this.isVisible = false;
+      else
+        this.isVisible = true;
+  }
   getLists():void {
       this.listSVC.getAllLists("from listtodo component")
         .subscribe((list: any)=>{if(list.hasOwnProperty("obj"))this.lists = list.obj});

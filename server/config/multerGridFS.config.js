@@ -1,7 +1,8 @@
 //use in middleWare in router collecFiles post("/upload")
 
 const mongoose = require('mongoose');
-const dbUrl = 'mongodb://127.0.0.1:27017/my_todo';
+const dbUrl = require('./db.config').db;
+const gridCollection = require('./db.config').gridFS;
 let GridFsStorage = require('multer-gridfs-storage');
 let Grid = require('gridfs-stream');
 const multer = require('multer');
@@ -16,7 +17,7 @@ let storage = GridFsStorage({
         let f = {
             id: id,
             filename: file.originalname.split('.')[0]+"_"+Date.now()+"."+file.originalname.split('.')[1],
-            bucketName: "gfsFile",
+            bucketName: gridCollection,
             uploadDate: Date.now(),
             metadata: {
                 originalname: file.originalname,

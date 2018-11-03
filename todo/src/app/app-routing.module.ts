@@ -7,6 +7,7 @@ import { ListdetailComponent } from './components/listdetail/listdetail.componen
 import { TododetailComponent } from './components/tododetail/tododetail.component';
 import { ListcourseComponent } from './components/listcourse/listcourse.component';
 import { CoursesComponent } from './components/courses/courses.component';
+import { CoursedetailComponent } from './components/coursedetail/coursedetail.component';
 //users
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
     {path: 'lists/:listId/todo/:todoId', component: TododetailComponent},
     {path: 'listscourses', component: ListcourseComponent},
     {path: 'listscourses/:listCourseId', component: CoursesComponent},
+    {path: 'listscourses/:listCourseId/course/:courseId', component: CoursedetailComponent},
 ]
 
 @NgModule({

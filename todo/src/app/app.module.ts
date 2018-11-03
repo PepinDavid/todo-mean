@@ -22,6 +22,7 @@ import { UploadComponent } from './components/upload/upload.component';
 import { ListcourseComponent } from './components/listcourse/listcourse.component';
 import { CoursesComponent } from './components/courses/courses.component';
 import { TododetailComponent } from './components/tododetail/tododetail.component';
+import { CoursedetailComponent } from './components/coursedetail/coursedetail.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { TododetailComponent } from './components/tododetail/tododetail.componen
     UploadComponent,
     ListcourseComponent,
     CoursesComponent,
-    TododetailComponent
+    TododetailComponent,
+    CoursedetailComponent
   ],
   imports: [
     BrowserModule,
