@@ -25,7 +25,13 @@
             <td class="text-center col-xs-1" [ngClass]="{'todo-done': todo.status == true}" ><button class="btn btn-danger" title="delete" (click)="delete(todo)">Supprimer</button></td>
         </tr>
     </table>
-    <div>
+    <div class="">
+        <button type="button" name="button" (click)="prevPage()">Previous</button>
+            <input type="text" [(ngModel)]="nbPage"> / {{nbTotal}}
+        <button type="button" name="button" (click)="nextPage()">Next</button>
+
+    </div>
+    <div class="add-todo">
         <legend>Ajouter d'une tâche</legend>
         <div class="form-group">
             <label>Titre Todo: </label>

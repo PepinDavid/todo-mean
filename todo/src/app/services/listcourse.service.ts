@@ -19,6 +19,7 @@ const httpOptions = {
 export class ListcourseService {
   api_url = 'http://localhost:3000';
   listTodoUrl = this.api_url+"/api/listscourse";
+  nbPage: number = 1;
   constructor(
       private http: HttpClient,
       private messageSVC: MessagesService
@@ -32,8 +33,11 @@ export class ListcourseService {
       return of(result as T);
     };
   }
+  setnbPage(nb: number){
+      this.nbPage = nb;
+  }
   getAllListsCourse(from: string): Observable<ListCourse[]>{
-      return this.http.get<ListCourse[]>(this.listTodoUrl, httpOptions).pipe(
+      return this.http.get<ListCourse[]>(this.listTodoUrl+"?page="+this.nbPage, httpOptions).pipe(
           tap( _ => this.log('Fetched lists todos')),
           catchError(this.handleError<ListCourse[]>('getAllListsCourse', []))
       )

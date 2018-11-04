@@ -27,6 +27,7 @@ const httpLogin = {
 export class UserService {
   api_url = 'http://localhost:3000';
   userUrl = this.api_url+"/api/user";
+  nbPage: number = 1;
   constructor(
       private http: HttpClient,
       private messageSVC: MessagesService
@@ -43,8 +44,11 @@ export class UserService {
       return of(result as T);
     };
   }
+  setnbPage(nb: number){
+      this.nbPage = nb;
+  }
   getUsers(): Observable<User[]>{
-      return this.http.get<User[]>(this.userUrl, httpOptions).pipe(
+      return this.http.get<User[]>(this.userUrl+"?page="+this.nbPage, httpOptions).pipe(
           tap( _ => this.log('Fetched users')),
           catchError(this.handleError<User[]>("getUsers", []))
       );

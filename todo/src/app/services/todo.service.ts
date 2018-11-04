@@ -23,7 +23,7 @@ export class TodoService {
   api_url = 'http://localhost:3000/api/lists';
   api_url_todos = 'http://localhost:3000/api/todos';
   listId = 0;
-
+  nbPage: number = 1;
   constructor(
     private http: HttpClient,
     private messageSVC: MessagesService
@@ -51,6 +51,9 @@ export class TodoService {
       return of(result as T);
     };
   }
+  setnbPage(nb: number){
+      this.nbPage = nb;
+  }
   //public
   getToDos(from: string): Observable<ToDo[]> {
     return this.http.get<ToDo[]>(this.api_url_todos, httpOptions).pipe(
@@ -61,7 +64,7 @@ export class TodoService {
   getTodosListId(id: string, from: string): Observable<ToDo[]> {
     let url = this.api_url;
     if (id)
-      url += "/" + id + "/todos";
+      url += "/" + id + "/todos?page="+this.nbPage;
     return this.http.get<ToDo[]>(url, httpOptions).pipe(
       tap( _ => this.log("Fetched ToDos idList: "+id)),
       catchError(this.handleError<ToDo[]>('getTodosListId', []))

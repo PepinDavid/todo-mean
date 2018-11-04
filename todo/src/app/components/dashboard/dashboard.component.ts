@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
       this.listSVC.getAllLists("from dashboard")
         .subscribe((list: any)=>{
             if(list.hasOwnProperty("obj")){
-                let l = list.obj;
+                let l = list.obj.docs;
                 l.sort((a,b)=>{
                     let modA: any = new Date(a.modifiedAt);
                     let modB: any = new Date(b.modifiedAt);
@@ -45,10 +45,7 @@ export class DashboardComponent implements OnInit {
       this.listCourseSVC.getAllListsCourse("from dashboard")
         .subscribe((listCourse: any)=>{
             if(listCourse.hasOwnProperty("obj"))
-            listCourse.obj.forEach((obj)=>{
-                if(this.listCourse.length < 5)
-                    this.listCourse.push(obj);
-            });
+                this.listCourse = listCourse.obj.docs;
         });
   }
   isLogin(){

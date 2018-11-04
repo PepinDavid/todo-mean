@@ -13,6 +13,12 @@
                 <td class="text-center col-xs-2"><button class="btn btn-danger" title="delete" (click)="delete(list)">Supprimer</button></td>
             </tr>
         </table>
+        <div class="">
+            <button type="button" name="button" (click)="prevPage()">Previous</button>
+                <input type="text" [(ngModel)]="nbPage"> / {{nbTotal}}
+            <button type="button" name="button" (click)="nextPage()">Next</button>
+
+        </div>
     </div>
     <div>
         <legend>Ajouter d'une liste</legend>

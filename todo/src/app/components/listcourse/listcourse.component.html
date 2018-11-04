@@ -1,19 +1,24 @@
 <div class="clo-xs-12 encart">
     <div class="col-xs-12">
         <button class="btn btn-success" (click)="formVisible()">Show/Hide form</button>
+        <button type="button" name="button" (click)="prevPage()">Previous</button>
+            <input type="text" [(ngModel)]="nbPage"> / {{nbTotal}}
+        <button type="button" name="button" (click)="nextPage()">Next</button>
     </div>
     <div class="row" *ngIf="!isVisible">
-        <div class="" *ngIf="listsCourseLength()">
-            <div class="col-xs-4 col-sm-3 col-md-2 encart border card" *ngFor="let list of listsCourse" >
-                <div class="encart-border encart-grey-graph text-center">
-                    {{list.title}}
-                </div>
-                <div class="text-center">
-                    {{list.desc}}
-                </div>
-                <div class="text-center">
-                    <a class="btn btn-primary" routerLink="/listscourses/{{list._id}}">Détails</a>
-                    <button class="btn btn-danger" (click)="delete(list)">Remove</button>
+        <div class="" style="margin-top: 60px" *ngIf="listsCourseLength()">
+            <div class="panel panel-default">
+                <div class="col-xs-4 col-sm-3 col-md-2 card border" *ngFor="let list of listsCourse" >
+                    <div class="encart-border encart-grey-graph text-center panel-heading">
+                        {{list.title}}
+                    </div>
+                    <div class="text-center panel-body">
+                        {{list.desc}}
+                    </div>
+                    <div class="text-center panel-footer">
+                        <a class="btn btn-primary" routerLink="/listscourses/{{list._id}}">Détails</a>
+                        <button class="btn btn-danger" (click)="delete(list)">Remove</button>
+                    </div>
                 </div>
             </div>
         </div>

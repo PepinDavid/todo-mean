@@ -8,7 +8,7 @@ exports.getListTodo = async function(query, page, limit){
         limit
     };
     try{
-        var lists = await ListTodo.find(query, {}, options);
+        var lists = await ListTodo.paginate(query, options);
         return lists;
     }catch(e){
         throw Error("Error loaded lists todo");

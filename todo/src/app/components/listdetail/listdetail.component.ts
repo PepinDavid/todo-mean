@@ -19,6 +19,8 @@ export class ListdetailComponent implements OnInit {
   selectedTodo: ToDo;
   dbclick = false;
   elementClicked = "";
+  nbPage: number = 1;
+  nbTotal: number = 100;
   constructor(
       private route: ActivatedRoute,
       private listSVC: ListtodoService,
@@ -37,14 +39,17 @@ export class ListdetailComponent implements OnInit {
       const id = this.route.snapshot.paramMap.get("listId");
       this.listSVC.getList(id).subscribe((list: any)=>{
           if(list.hasOwnProperty('obj'))
-            this.list = list.obj[0];
+            this.list = list.obj.docs[0];
       });
   }
   getTodos(){
       const id = this.route.snapshot.paramMap.get("listId");
+      this.todoSVC.setnbPage(this.nbPage);
       this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos: any)=>{
-          if(todos.hasOwnProperty('obj'))
-              this.todos = todos.obj;
+          if(todos.hasOwnProperty('obj')){
+              this.todos = todos.obj.docs;
+              this.nbTotal = todos.obj.pages;
+          }
       })
   }
   add(td: ToDo): void{
@@ -92,6 +97,20 @@ export class ListdetailComponent implements OnInit {
               td.desc = el.innerText;
               this.todoSVC.editTodo(this.list._id, td).subscribe(t => console.log(t));
           }
+      }
+  }
+  prevPage(){
+      if(this.nbPage > 1){
+          this.nbPage--;
+          this.todoSVC.setnbPage(this.nbPage);
+          this.getTodos();
+      }
+  }
+  nextPage(){
+      if(this.nbPage < this.nbTotal){
+          this.nbPage++;
+          this.todoSVC.setnbPage(this.nbPage);
+          this.getTodos();
       }
   }
 }

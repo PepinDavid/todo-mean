@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var mongoosePagination = require('mongoose-paginate');
 
 var UserSchema = new mongoose.Schema({
     email: {
@@ -49,6 +50,6 @@ UserSchema.pre('save', function(next){
 UserSchema.methods.comparePwd = function(pwd){
     return bcrypt.compareSync(pwd, this.password);
 }
-
+UserSchema.plugin(mongoosePagination);
 const User = mongoose.model('Users', UserSchema);
 module.exports = User;

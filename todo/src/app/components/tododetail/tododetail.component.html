@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-xs-6">
                         <label>Fait: </label>
-                        <input type="checkbox" [checked]="todo.status" (change)="updateCheckBox(todo)" >
+                        <input type="checkbox" [checked]="todo.status" (change)="updateCheckBox()" >
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 <label>Description Todo:</label>
                 <textarea class="form-control" [(ngModel)]="todo.desc" rows="5" cols="50"></textarea>
             </div>
-            <button class="btn btn-primary btn-block" (click)="updateTodo(todo)" name="button">Modifier</button>
+            <button class="btn btn-primary btn-block" (click)="updateTodo()" name="button">Modifier</button>
         </div>
         <div class="col-xs-12  encart encart-border encart-border-grey">
             <div class="form-group">
@@ -31,7 +31,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-success btn-sm btn-block" (click)="uploadFile(todo)">
+                <button type="button" class="btn btn-success btn-sm btn-block" (click)="uploadFile()">
                     Envoyer l'image
                 </button>
             </div>

@@ -14,6 +14,8 @@ export class ListcourseComponent implements OnInit {
   @Input() listInp: ListCourse;
   listsCourse: ListCourse[] = [];
   isVisible: boolean = false;
+  nbPage: number = 1;
+  nbTotal: number = 100;
   constructor(
       private listCourseSVC: ListcourseService
   ) { }
@@ -29,9 +31,11 @@ export class ListcourseComponent implements OnInit {
         this.isVisible = true;
   }
   getListCourse(): void{
+      this.listCourseSVC.setnbPage(this.nbPage);
       this.listCourseSVC.getAllListsCourse("from listcourse component").subscribe((listCourse: any)=>{
             if(listCourse.hasOwnProperty("obj"))
-                this.listsCourse = listCourse.obj;
+                this.listsCourse = listCourse.obj.docs;
+                this.nbTotal = listCourse.obj.pages;
         })
   }
   delete(list: ListCourse){
@@ -57,6 +61,20 @@ export class ListcourseComponent implements OnInit {
   }
   listsCourseLength(){
       return this.listsCourse.length > 0
+  }
+  prevPage(){
+      if(this.nbPage > 1){
+          this.nbPage--;
+          this.listCourseSVC.setnbPage(this.nbPage);
+          this.getListCourse();
+      }
+  }
+  nextPage(){
+      if(this.nbPage < this.nbTotal){
+          this.nbPage++;
+          this.listCourseSVC.setnbPage(this.nbPage);
+          this.getListCourse();
+      }
   }
 }
 

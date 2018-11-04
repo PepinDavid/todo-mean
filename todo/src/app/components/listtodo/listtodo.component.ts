@@ -13,6 +13,8 @@ export class ListtodoComponent implements OnInit {
   lists: ListTodo[] = [];
   selectedList: ListTodo;
   isVisible: boolean = false;
+  nbPage: number = 1;
+  nbTotal: number = 100;
   constructor(
       private listSVC: ListtodoService
   ) { }
@@ -28,8 +30,14 @@ export class ListtodoComponent implements OnInit {
         this.isVisible = true;
   }
   getLists():void {
+      this.listSVC.setnbPage(this.nbPage);
       this.listSVC.getAllLists("from listtodo component")
-        .subscribe((list: any)=>{if(list.hasOwnProperty("obj"))this.lists = list.obj});
+        .subscribe((list: any)=>{
+            if(list.hasOwnProperty("obj")){
+                this.lists = list.obj.docs;
+                this.nbTotal = list.obj.pages;
+            }
+        });
   }
  updateListTodo(l: ListTodo): void{
      if(l.status)
@@ -60,5 +68,19 @@ export class ListtodoComponent implements OnInit {
   }
   clearList(){
       this.list = new ListTodo();
+  }
+  prevPage(){
+      if(this.nbPage > 1){
+          this.nbPage--;
+          this.listSVC.setnbPage(this.nbPage);
+          this.getLists();
+      }
+  }
+  nextPage(){
+      if(this.nbPage < this.nbTotal){
+          this.nbPage++;
+          this.listSVC.setnbPage(this.nbPage);
+          this.getLists();
+      }
   }
 }

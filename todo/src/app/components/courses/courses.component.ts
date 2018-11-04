@@ -17,6 +17,8 @@ export class CoursesComponent implements OnInit {
   listCourses: ListCourse;
   courses: Courses[] = [];
   elementClicked = "";
+  nbPage: number = 1;
+  nbTotal: number = 100;
   constructor(
       private route: ActivatedRoute,
       private location: Location,
@@ -34,14 +36,17 @@ export class CoursesComponent implements OnInit {
       const id = this.route.snapshot.paramMap.get("listCourseId");
       this.listCourseSVC.getListCourse(id).subscribe((list: any)=>{
           if(list.hasOwnProperty('obj'))
-            this.listCourses = list.obj[0];
+            this.listCourses = list.obj.docs[0];
       });
   }
   getCourses(): void{
       const id = this.route.snapshot.paramMap.get("listCourseId");
+      this.courseSVC.setnbPage(this.nbPage);
       this.courseSVC.getCoursesListId(id, "from courses").subscribe((courses: any)=>{
-         if(courses.hasOwnProperty('obj'))
-             this.courses = courses[0];
+         if(courses.hasOwnProperty('obj')){
+             this.courses = courses.obj.docs;
+             this.nbTotal = courses.obj.pages;
+         }
       });
   }
   add(course: Courses): void {
@@ -59,6 +64,7 @@ export class CoursesComponent implements OnInit {
   }
   updateCell(e, course: Courses): void{
       let el = e.path[0];
+      if(el.innerText.trim() == "") return;
       if(el.keyCode == 13){
           if($(el).attr("class").indexOf("courseTitle") > -1)
               course.title = el.innerText
@@ -74,5 +80,19 @@ export class CoursesComponent implements OnInit {
       let id = this.listCourses._id;
       this.courses = this.courses.filter(c => c !== course);
       this.courseSVC.deleteCourse(id, course).subscribe();
+  }
+  prevPage(){
+      if(this.nbPage > 1){
+          this.nbPage--;
+          this.courseSVC.setnbPage(this.nbPage);
+          this.getCourses();
+      }
+  }
+  nextPage(){
+      if(this.nbPage < this.nbTotal){
+          this.nbPage++;
+          this.courseSVC.setnbPage(this.nbPage);
+          this.getCourses();
+      }
   }
 }

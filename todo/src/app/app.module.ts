@@ -26,6 +26,7 @@ import { ListcourseComponent } from './components/listcourse/listcourse.componen
 import { CoursesComponent } from './components/courses/courses.component';
 import { TododetailComponent } from './components/tododetail/tododetail.component';
 import { CoursedetailComponent } from './components/coursedetail/coursedetail.component';
+import { ProfilComponent } from './components/profil/profil.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { CoursedetailComponent } from './components/coursedetail/coursedetail.co
     ListcourseComponent,
     CoursesComponent,
     TododetailComponent,
-    CoursedetailComponent
+    CoursedetailComponent,
+    ProfilComponent
   ],
   imports: [
     BrowserModule,

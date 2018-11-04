@@ -8,7 +8,7 @@ exports.getListCourse = async function(query, page, limit){
         limit
     };
     try{
-        var lists = await ListCourse.find(query, {}, options);
+        var lists = await ListCourse.paginate(query, options);
         return lists;
     }catch(e){
         throw Error("Error loaded lists todo");

@@ -8,7 +8,7 @@ exports.getCourses = async function(query, page, limit){
         limit
     }
     try{
-        var courses = await Courses.find(query, {}, options);
+        var courses = await Courses.paginate(query, options);
         return courses;
     }catch(e){
         throw Error("Error loaded courses");

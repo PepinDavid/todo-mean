@@ -10,8 +10,8 @@ function ERROR(e){
 }
 
 exports.getListsCourse = async function(req, res, next){
-    var page = req.body.page || 1;
-    var limit = req.body.limit || 10;
+    var page = req.query.page || 1;
+    var limit = 10;
     var token = getToken(req.headers);
     if(token){
         try{

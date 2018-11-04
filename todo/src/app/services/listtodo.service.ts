@@ -24,6 +24,7 @@ export class ListtodoService {
 
   api_url = 'http://localhost:3000';
   listTodoUrl = this.api_url+"/api/lists";
+  nbPage: number = 1;
   constructor(
       private http: HttpClient,
       private messageSVC: MessagesService
@@ -45,8 +46,11 @@ export class ListtodoService {
       return of(result as T);
     };
   }
+  setnbPage(nb: number){
+      this.nbPage = nb;
+  }
   getAllLists(from: string): Observable<ListTodo[]>{
-      return this.http.get<ListTodo[]>(this.listTodoUrl, httpOptions).pipe(
+      return this.http.get<ListTodo[]>(this.listTodoUrl+"?page="+this.nbPage, httpOptions).pipe(
           tap( _ => this.log('Fetched lists todos')),
           catchError(this.handleError<ListTodo[]>('getAllLists', []))
       )

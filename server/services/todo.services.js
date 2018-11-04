@@ -5,10 +5,11 @@ var _this = this;
 exports.getTodos = async function(query, page, limit){
     var options = {
         page,
-        limit
+        limit,
+        sort: {status: 1}
     }
     try{
-        var todos = await ToDo.find(query, {}, options);
+        var todos = await ToDo.paginate(query, options);
         return todos;
     }catch(e){
         throw Error("Error loaded todos");
@@ -35,7 +36,6 @@ exports.createTodo = async function(todo){
 
 exports.updateTodo = async function(todo){
     var id = todo._id;
-    console.log("service todo update : "+id)
     try{
         var oldTodo = await ToDo.findById(id);
     }catch(e){

@@ -23,6 +23,7 @@ export class CourseService {
   api_url = 'http://localhost:3000/api/listscourse';
   api_url_course = 'http://localhost:3000/api/courses';
   listCourseId = 0;
+  nbPage = 1;
   constructor(
       private http: HttpClient,
       private messageSVC: MessagesService
@@ -37,16 +38,20 @@ export class CourseService {
       return of(result as T);
     };
   }
+  setnbPage(nb: number){
+      this.nbPage = nb;
+  }
   getCourses(from: string): Observable<Course[]> {
       return this.http.get<Course[]>(this.api_url_course, httpOptions).pipe(
         tap( _ => this.log("Fetched Courses")),
         catchError(this.handleError<Course[]>('getCourses', []))
       )
   }
+
   getCoursesListId(id: string, from: string): Observable<Course[]> {
     let url = this.api_url;
     if (id)
-      url += "/" + id + "/courses";
+      url += "/" + id + "/courses?page="+this.nbPage;
     return this.http.get<Course[]>(url, httpOptions).pipe(
       tap( _ => this.log("Fetched Courses idListCourse: "+id)),
       catchError(this.handleError<Course[]>('getCoursesListId', []))

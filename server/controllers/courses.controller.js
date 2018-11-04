@@ -10,8 +10,8 @@ function ERROR(e){
 }
 
 exports.getCourses = async function(req, res, next){
-    var page = req.body.page || 1;
-    var limit = req.body.limit || 10;
+    var page = req.query.page || 1;
+    var limit = 10;
     var idListCourses = req.listCoursesId;
     var filter = {};
     if(idListCourses)
@@ -81,6 +81,7 @@ exports.updateCourse = async function(req, res, next){
         _id: id,
         title: b.title,
         desc: b.desc,
+        files: b.files,
         user: req.session.userUsername
     }
     var token = getToken(req.headers);
