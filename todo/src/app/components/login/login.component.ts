@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
           if(u != undefined){
               this.data = u;
               localStorage.setItem('Token', this.data.token);
+              this.isLogin();
           }
       });
   }

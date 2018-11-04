@@ -13,9 +13,12 @@
             <td contenteditable='true' (keypress)="updateCell($event, course)" class="text-left col-xs-2 courseTitle">{{course.title}}</td>
             <td contenteditable='true' (keypress)="updateCell($event, course)" class="text-left col-xs-6 courseDesc">{{course.desc}}</td>
             <td class="text-left col-xs-3 todo-done" >
-                <a *ngIf="course.files?.length" class="btn btn-success" routerLink="/listscourses/{{course.idList}}/course/{{course._id}}">Voir les fichiers</a>
-                <a *ngIf="!course.files?.length" class="btn btn-success" routerLink="/listscourses
-                /{{course.idList}}/todo/{{todo._id}}">Pas des fichiers, clic pour ajouter</a>
+                <a *ngIf="course.files?.length" class="btn btn-success" routerLink="/listscourses/{{course.idList}}/course/{{course._id}}">
+                    {{course.files.length}} fichiers, Voir les fichiers
+                </a>
+                <a *ngIf="!course.files?.length" class="btn btn-success" routerLink="/listscourses/{{course.idList}}/course/{{course._id}}">
+                    {{course.files.length}} fichier, Ajouter
+                </a>
             </td>
             <td class="text-center col-xs-1" ><button class="btn btn-danger" title="delete" (click)="delete(course)">Supprimer</button></td>
         </tr>

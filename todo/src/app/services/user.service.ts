@@ -16,6 +16,11 @@ const httpOptions = {
     }),
     withCredentials: true
 }
+const httpLogin = {
+    headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+    })
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -46,7 +51,7 @@ export class UserService {
   }
   login(user: User): Observable<User>{
       let urlLog = this.userUrl+"/login";
-      return this.http.post<User>(urlLog, user, httpOptions).pipe(
+      return this.http.post<User>(urlLog, user, httpLogin).pipe(
           tap( _ => this.log("login")),
           catchError(this.handleError<User>("login"))
       );
@@ -58,8 +63,7 @@ export class UserService {
       );
   }
   createUser(user: User): Observable<User>{
-      console.log(user)
-      return this.http.post<User>(this.userUrl, user, httpOptions).pipe(
+      return this.http.post<User>(this.userUrl, user, httpLogin).pipe(
           tap( _ => this.log("createUser")),
           catchError(this.handleError<User>("createUser"))
       )

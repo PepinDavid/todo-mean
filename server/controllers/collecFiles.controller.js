@@ -17,8 +17,9 @@ function ERROR(e) {
             message: e.message
         };
 }
+
 function removeChunks(connexion, id, response){
-    connection.collection(gridCollection+".chunks", function (error, collection) {
+    connexion.collection(gridCollection+".chunks", function (error, collection) {
         if(error)response.status(400).json(ERROR("Connexion to "+gridCollection+".chunks failed"));
         collection.removeMany({files_id: id}, function(err, respCollec){
             if(err) response.status(400).json(ERROR("Remove file failed"));
@@ -30,15 +31,15 @@ function removeChunks(connexion, id, response){
 exports.downloadFile = function(req, res, next) {
     if(!req.params.fileId)
         return res.status(400).json({status: 400, message: "Error, req don't has fileId"});
-    var db = mongoose.connection.db;
-    var mongoDriver = mongoose.mongo;
-    var gfs = new Grid(db, mongoDriver);
+    let db = mongoose.connection.db;
+    let mongoDriver = mongoose.mongo;
+    let gfs = new Grid(db, mongoDriver);
     gfs.collection(gridCollection);
     let id = mongoose.Types.ObjectId(req.params.fileId);
     gfs.files.find({_id: id}).toArray((err, files)=>{
         if(!files || files.length < 1)
             return res.status(404).json({status: 404, message: "Error, None files"});
-        var readstream = gfs.createReadStream({
+        let readstream = gfs.createReadStream({
             filename: files[0].filename,
             root: gridCollection
         });
@@ -48,18 +49,18 @@ exports.downloadFile = function(req, res, next) {
     });
 };
 
-exports.getFilesByTodo = function(req, res, next) {
-    if(!req.params.todoId)
-        return res.status(400).json({status: 400, message: "Error, req don't has todoId"});
-    var db = mongoose.connection.db;
-    var mongoDriver = mongoose.mongo;
-    var gfs = new Grid(db, mongoDriver);
+exports.getFilesByAttachment = function(req, res, next) {
+    if(!req.params.attachmentId)
+        return res.status(400).json({status: 400, message: "Error, req don't has attachmentId"});
+    let db = mongoose.connection.db;
+    let mongoDriver = mongoose.mongo;
+    let gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
+    let id = req.params.attachmentId;
     gfs.collection(gridCollection);
-    let id = req.params.todoId;
-    console.log("idTodo : "+id)
-    gfs.files.find({"metadata.todoId": id}).toArray((err, files)=>{
+
+    gfs.files.find({"metadata.attachmentId": id}).toArray((err, files)=>{
         if(!files || files.length < 1)
             return res.status(404).json({status: 404, message: "Error, None files"});
         files.forEach((file) => {
@@ -76,15 +77,15 @@ exports.getFilesByTodo = function(req, res, next) {
 };
 
 exports.getFiles = function(req, res, next){
-    var db = mongoose.connection.db;
-    var mongoDriver = mongoose.mongo;
-    var gfs = new Grid(db, mongoDriver);
+    let db = mongoose.connection.db;
+    let mongoDriver = mongoose.mongo;
+    let gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
     gfs.collection(gridCollection);
     gfs.files.find().toArray((err, files)=>{
         if(!files || files.length < 1)
-            return res.status(404).json({status: 404, message: "Error, None files"});
+            return res.status(200).json({status: 200, message: "No files"});
 
         files.forEach((file) => {
             filesData[count++] = {
@@ -92,35 +93,35 @@ exports.getFiles = function(req, res, next){
                 originalname: file.metadata.originalname,
                 filename: file.filename,
                 contentType: file.contentType,
-                mimetype: file.metadata.mimetype
+                mimetype: file.metadata.mimetype,
+                attachmentId: file.metadata.attachmentId
             }
         });
         res.json(filesData);
     });
-}
+};
+
 exports.createFile = function(req, res, next){
     collecFile(req, res, (err) => {
-        console.log(req.fileId);
         if(err){
-            console.log(err)
-            res.status(400).json(ERROR("Upload file failed"));
+            res.status(400).json(ERROR(err));
             return;
         }
         res.status(200).json({status: 200, obj: {_id: req.fileId}, message: "Successfully file uploaded"});
     });
-}
+};
 
-exports.removeAllFilesByTodo = function(req, res, next){
-    if(!req.params.todoId)
-        return res.status(400).json({status: 400, message: "Error, req don't has todoId"});
-    var db = mongoose.connection.db;
-    var mongoDriver = mongoose.mongo;
-    var gfs = new Grid(db, mongoDriver);
+exports.removeAllFilesByAttachment = function(req, res, next){
+    if(!req.params.attachmentId)
+        return res.status(400).json({status: 400, message: "Error, req don't has attachmentId"});
+    let db = mongoose.connection.db;
+    let mongoDriver = mongoose.mongo;
+    let gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
+    let id = req.params.attachmentId;
     gfs.collection(gridCollection);
-    let id = req.params.todoId;
-    gfs.files.remove({"metadata.todoId": id}, function (err, gridStore) {
+    gfs.files.remove({"metadata.attachmentId": id}, function (err, gridStore) {
         if(err){
             console.log(err)
             res.status(400).json(ERROR("Remove file failed"));
@@ -128,20 +129,20 @@ exports.removeAllFilesByTodo = function(req, res, next){
         }
         res.status(200).json({status: 200, message: "Successfully remove file"});
     });
-}
+};
 
 exports.removeFile = function(req, res, next){
     if(!req.params.fileId)
         return res.status(400).json({status: 400, message: "Error, req don't has fileId"});
-    var db = mongoose.connection.db;
-    var mongoDriver = mongoose.mongo;
-    var gfs = new Grid(db, mongoDriver);
+    let db = mongoose.connection.db;
+    let mongoDriver = mongoose.mongo;
+    let gfs = new Grid(db, mongoDriver);
     let filesData = [];
     let count = 0;
     gfs.collection(gridCollection)
     let id = mongoose.Types.ObjectId(req.params.fileId);
     gfs.files.remove({_id: id}, function (err, gridStore) {
         if(err) res.status(400).json(ERROR("Remove file failed"));
-
+        removeChunks(db, id, res);
     });
-}
+};

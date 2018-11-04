@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { FileUploader, FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
-import { UploadService } from '../../services/upload.service';
+import { FilesService } from '../../services/files.service';
 
 @Component({
   selector: 'app-upload',
@@ -13,7 +13,7 @@ export class UploadComponent implements OnInit {
   currentFileUpload: File;
   filesList: Array<Object> = [];
   constructor(
-    public uploadSVC: UploadService
+    public filesSVC: FilesService
   ) { }
   ngOnInit() {
     this.getFiles();
@@ -23,33 +23,33 @@ export class UploadComponent implements OnInit {
   }
   uploadFile() {
     this.currentFileUpload = this.selectedFiles.item(0);
-    this.uploadSVC.uploadFile(this.currentFileUpload).subscribe((event) => {
-
+    this.filesSVC.uploadFile(this.currentFileUpload).subscribe((event) => {
+      this.getFiles();
     }, (error) => {
       console.log(error)
     })
   }
   getFiles() {
-    this.uploadSVC.getFiles().subscribe((files: any) => {
+    this.filesSVC.getFiles().subscribe((files: any) => {
       if (files) {
         for (let i = 0; i < files.length; i++) {
-          console.log(files)
           let obj = {
             id: files[i].id,
             filename: files[i].filename,
             originalname: files[i].originalname,
             contentType: files[i].contentType,
+            attachmentId: files[i].attachmentId
           }
           this.filesList[i] = obj
         }
-        console.log(this.filesList)
+      } else {
+          this.filesList = [];
       }
     })
   }
   download(id, contentType, originalname) {
-    this.uploadSVC.downloadFile(id).subscribe(
+    this.filesSVC.downloadFile(id).subscribe(
       (blob) => {
-        console.log(blob)
         const file = new Blob([blob], { type: contentType });
         saveData(file, originalname);
       }
@@ -57,9 +57,9 @@ export class UploadComponent implements OnInit {
   }
   removeFile(id) {
     let self = this
-    this.uploadSVC.removeFile(id).subscribe(
+    this.filesSVC.removeFile(id).subscribe(
       (res) => {
-        console.log(res)
+        self.filesList = self.filesList.filter((f: any) => { f.id !== id })
       }
     )
   }

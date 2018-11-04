@@ -10,7 +10,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { TodoService } from './services/todo.service';
 import { ListtodoService } from './services/listtodo.service';
 import { MessagesService } from './services/messages.service';
-import { UploadService } from './services/upload.service';
+import { ListcourseService } from './services/listcourse.service';
+import { CourseService } from './services/course.service'
+import { FilesService } from './services/files.service';
+import { UserService } from './services/user.service';
 //components created
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ListtodoComponent } from './components/listtodo/listtodo.component';
@@ -49,7 +52,11 @@ import { CoursedetailComponent } from './components/coursedetail/coursedetail.co
   providers: [
     ListtodoService,
     TodoService,
-    MessagesService
+    ListcourseService,
+    CourseService,
+    FilesService,
+    MessagesService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

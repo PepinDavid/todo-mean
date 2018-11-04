@@ -5,7 +5,7 @@ import { ListtodoService } from '../../services/listtodo.service';
 import ToDo from '../../models/todo.model';
 import ListTodo from '../../models/listtodo.model';
 import { TodoService } from '../../services/todo.service';
-import { UploadService } from '../../services/upload.service';
+import { FilesService } from '../../services/files.service';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class TododetailComponent implements OnInit {
       private route: ActivatedRoute,
       private todoSVC: TodoService,
       private listSVC: ListtodoService,
-      private uploadSVC: UploadService
+      private FilesSVC: FilesService
   ) { }
 
   ngOnInit() {
@@ -72,7 +72,7 @@ export class TododetailComponent implements OnInit {
   }
   uploadFile(todo: ToDo): void{
         this.currentFileUpload = this.selectedFiles.item(0);
-        this.uploadSVC.uploadTodoFile(this.currentFileUpload, todo._id)
+        this.FilesSVC.uploadAttachmentFile(this.currentFileUpload, todo._id)
           .subscribe((res: any)=>{
               let id = res.obj._id;
               if(todo.files)
@@ -87,7 +87,7 @@ export class TododetailComponent implements OnInit {
   }
   getFiles(todo: ToDo): void{
         if(todo.files.length > 0 ){
-            this.uploadSVC.getFilesByTodo(todo._id).subscribe((files: any)=>{
+            this.FilesSVC.getFilesByAttachment(todo._id).subscribe((files: any)=>{
                 let filesList: Array<Object> = [];
                 if(files){
                     for(let i = 0; i < files.length; i++){
@@ -109,7 +109,7 @@ export class TododetailComponent implements OnInit {
         }
   }
   download(id, contentType, originalname) {
-     this.uploadSVC.downloadFile(id).subscribe(
+     this.FilesSVC.downloadFile(id).subscribe(
         (blob: any) => {
           const file = new Blob([blob], { type: contentType });
           saveData(file, originalname);
@@ -118,7 +118,7 @@ export class TododetailComponent implements OnInit {
   }
   removeFile(id){
     let self = this
-    this.uploadSVC.removeFile(id).subscribe(
+    this.FilesSVC.removeFile(id).subscribe(
         (res)=>{
             console.log(res)
             self.todo.files = self.todo.files.filter(f => f !== id);
@@ -127,7 +127,7 @@ export class TododetailComponent implements OnInit {
     )
   }
   imgDisplay(obj){
-      this.uploadSVC.downloadFile(obj.id).subscribe(
+      this.FilesSVC.downloadFile(obj.id).subscribe(
           (blob: any) => {
           const file = new Blob([blob], { type: obj.contentType });
           display(file, obj);

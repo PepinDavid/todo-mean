@@ -5,7 +5,7 @@ import  ListCourse from '../../models/listcourse.model';
 import Courses from '../../models/courses.model';
 import { ListcourseService } from '../../services/listcourse.service';
 import { CourseService } from '../../services/course.service';
-import { UploadService } from '../../services/upload.service';
+import { FilesService } from '../../services/files.service';
 
 @Component({
   selector: 'app-coursedetail',
@@ -21,7 +21,7 @@ export class CoursedetailComponent implements OnInit {
       private route: ActivatedRoute,
       private listCourseSVC: ListcourseService,
       private courseSVC: CourseService,
-      private uploadSVC: UploadService
+      private filesSVC: FilesService
   ) { }
 
   ngOnInit() {

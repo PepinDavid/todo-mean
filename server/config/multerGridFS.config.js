@@ -3,17 +3,20 @@
 const mongoose = require('mongoose');
 const dbUrl = require('./db.config').db;
 const gridCollection = require('./db.config').gridFS;
+const multer = require('multer');
 let GridFsStorage = require('multer-gridfs-storage');
 let Grid = require('gridfs-stream');
-const multer = require('multer');
 
 let storage = GridFsStorage({
     url: dbUrl,
     gfs: ()=>{return Grid(mongoose.connection.db, mongoose.mongo);},
     file: (req, file)=>{
-        if(!req.params.todoId)
-            return null;
-        var id = mongoose.Types.ObjectId();
+        console.log(req.params.attachmentId)
+        if(!req.params.attachmentId)
+            return {status: 400, message: "File must have an Id attachment"};
+        let stringId = req.params.attachmentId;
+        console.log(stringId)
+        let id = mongoose.Types.ObjectId();
         let f = {
             id: id,
             filename: file.originalname.split('.')[0]+"_"+Date.now()+"."+file.originalname.split('.')[1],
@@ -24,15 +27,14 @@ let storage = GridFsStorage({
                 mimetype: file.mimetype,
                 encoding: file.encoding,
                 fieldname: file.fieldname,
-                todoId: req.params.todoId
+                attachmentId: stringId
             }
         };
-        console.log(id.toString())
         req.fileId = id.toString();
         return f;
     }
 });
 
-var collecFile = multer({storage:storage});
+let collecFile = multer({storage:storage});
 
 module.exports = collecFile.single('file');
