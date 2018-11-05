@@ -38,9 +38,8 @@ export class UserService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      // TODO: better job of transforming error for user consumption
+      console.error(error);
       this.log(`${operation} failed: ${error.message}`);
-      // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
@@ -52,6 +51,25 @@ export class UserService {
           tap( _ => this.log('Fetched users')),
           catchError(this.handleError<User[]>("getUsers", []))
       );
+  }
+  getMe(): Observable<User>{
+      console.log(this.userUrl+"/me")
+      return this.http.get<User>(this.userUrl+"/me", httpOptions).pipe(
+          tap( _ => this.log('Fetched users')),
+          catchError(this.handleError<User>("getUser"))
+      );
+  }
+  updateUser(user: User): Observable<User> {
+      return this.http.put<User>(this.userUrl, user, httpOptions).pipe(
+          tap( _ => this.log("Updated user")),
+          catchError(this.handleError<User>("updateUser"))
+      )
+  }
+  updatePwd(pwd: string): Observable<User> {
+      return this.http.put<User>(this.userUrl, {password: pwd}, httpOptions).pipe(
+          tap( _ => this.log("Updated password")),
+          catchError(this.handleError<User>("updatePwd"))
+      )
   }
   login(user: User): Observable<User>{
       let urlLog = this.userUrl+"/login";

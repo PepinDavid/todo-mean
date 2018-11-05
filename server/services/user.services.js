@@ -26,12 +26,21 @@ exports.getUsers = async function(query, page, limit){
         limit
     }
     try {
-        var users = await User.find(query, {}, options);
+        var users = await User.paginate(query, options);
         return users;
     }catch(e){
-        throw Error("Error occured while logged in User");
+        throw Error("Error occured while get Users");
     }
 };
+
+exports.getUser = async function(query){
+    try{
+        var user = await User.findOne(query, {password: 0});
+        return user;
+    }catch(e){
+        throw Error("Error occured while user gets own informations")
+    }
+}
 
 exports.createUser = async function(user){
     var newUser = new User({
@@ -55,7 +64,7 @@ exports.createUser = async function(user){
 exports.updateUser = async function(user){
     var id = user._id;
     try{
-        oldUser = User.findById(id);
+        oldUser = await User.findById(id);
     }catch(e){
         throw Error("User id is not exist");
     }
@@ -66,11 +75,10 @@ exports.updateUser = async function(user){
         for(var k in user){
             oldUser[k] = user[k];
         }
-        oldUser.password = hash;
         oldUser.modifiedAt = new Date();
         var updatedUser = await oldUser.save();
-        delete updatedUser.password;
-        return updatedUser;
+        var user = await User.findById(updatedUser._id, {password: 0});
+        return user;
     }catch(e){
         throw Error("Error while updated user");
     }

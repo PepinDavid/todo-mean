@@ -4,6 +4,7 @@ var passport = require('passport');
 var UserCtrl = require('../../controllers/user.controller');
 
 UserRoute.get('/', passport.authenticate('jwt', { session: false}), UserCtrl.getUsers)
+            .get('/me', passport.authenticate('jwt', { session: false}), UserCtrl.getUser)
             .get('/:userId', passport.authenticate('jwt', { session: false}), UserCtrl.getUser)
             .post('/login', UserCtrl.loginUser)
             .post('/', UserCtrl.createUser)

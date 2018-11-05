@@ -19,7 +19,7 @@ exports.getUsers = async function(req, res, next){
     var token = getToken(req.headers);
     if(token){
         try{
-            var users = await userSvc.getTodos({}, page, limit);
+            var users = await userSvc.getUsers({}, page, limit);
             return res.status(200).json({status: 200, obj: users, message: "Sucessfully loaded users"});
         }catch(e){
             return res.status(400).json(ERROR(e));
@@ -30,14 +30,13 @@ exports.getUsers = async function(req, res, next){
 };
 
 exports.getUser = async function(req, res, next){
-    var page = req.body.page || 1;
-    var limit = req.body.limit || 10;
     var filter = {};
     var token = getToken(req.headers);
     if(token){
         try{
-            var users = await userSvc.getTodos(filter, page, limit);
-            return res.status(200).json({status: 200, obj: users, message: "Sucessfully loaded users"});
+            var filter = {username: req.user.username, email: req.user.email};
+            var user = await userSvc.getUser(filter);
+            return res.status(200).json({status: 200, obj: user, message: "Sucessfully loaded user"});
         }catch(e){
             return res.status(400).json(ERROR(e));
         }
@@ -89,17 +88,18 @@ exports.createUser = async function(req, res, next){
 };
 
 exports.updateUser = async function(req, res, next){
-    var id = req.body.id;
-    if(!id)
-        return res.status(400).json(ERROR("Error: _id not defined"));
-    var user = {
-        _id: id,
-        name: req.body.name,
-        surname: req.body.surname,
-        email: req.body.email
-    };
     var token = getToken(req.headers);
     if(token){
+        var id = req.user._id;
+        if(!id)
+            return res.status(400).json(ERROR("Error: _id not defined"));
+        var user = {
+            _id: id
+        };
+        var b = req.body;
+        for(var k in b){
+            user[k] = b[k];
+        }
         try{
             var updated = await userSvc.updateUser(user);
             return res.status(204).json({status: 204, obj: updated, message: "Successfully updated user"});

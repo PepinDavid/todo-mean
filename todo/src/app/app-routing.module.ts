@@ -8,6 +8,8 @@ import { TododetailComponent } from './components/tododetail/tododetail.componen
 import { ListcourseComponent } from './components/listcourse/listcourse.component';
 import { CoursesComponent } from './components/courses/courses.component';
 import { CoursedetailComponent } from './components/coursedetail/coursedetail.component';
+import { ProfilComponent } from './components/profil/profil.component';
+
 //users
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -27,6 +29,7 @@ const routes: Routes = [
     {path: 'listscourses', component: ListcourseComponent},
     {path: 'listscourses/:listCourseId', component: CoursesComponent},
     {path: 'listscourses/:listCourseId/course/:courseId', component: CoursedetailComponent},
+    {path: 'profil', component: ProfilComponent}
 ]
 
 @NgModule({
