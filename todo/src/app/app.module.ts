@@ -6,6 +6,8 @@ import { NgModule } from '@angular/core';
 //components angular
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { NgxWigModule } from 'ngx-wig';
+
 //services created
 import { TodoService } from './services/todo.service';
 import { ListtodoService } from './services/listtodo.service';
@@ -27,6 +29,7 @@ import { CoursesComponent } from './components/courses/courses.component';
 import { TododetailComponent } from './components/tododetail/tododetail.component';
 import { CoursedetailComponent } from './components/coursedetail/coursedetail.component';
 import { ProfilComponent } from './components/profil/profil.component';
+import { BertComponent } from './bert/bert.component';
 
 @NgModule({
   declarations: [
@@ -42,14 +45,16 @@ import { ProfilComponent } from './components/profil/profil.component';
     CoursesComponent,
     TododetailComponent,
     CoursedetailComponent,
-    ProfilComponent
+    ProfilComponent,
+    BertComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxWigModule
   ],
   providers: [
     ListtodoService,

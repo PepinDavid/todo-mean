@@ -1,0 +1,6 @@
+<div class="header {{bertSVC.color}}" *ngIf="bertSVC.messages.length">
+    <h2>Messages</h2>
+    <div *ngFor="let mess of bertSVC.messages">
+            <span>{{mess}}</span>
+    </div>
+</div>

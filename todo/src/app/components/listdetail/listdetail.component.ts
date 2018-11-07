@@ -5,6 +5,7 @@ import * as $ from 'jquery';
 import ListTodo from '../../models/listtodo.model';
 import ToDo from '../../models/todo.model';
 import { ListtodoService } from '../../services/listtodo.service';
+import { BertService } from '../../services/bert.service';
 import { TodoService } from '../../services/todo.service';
 
 @Component({
@@ -25,7 +26,8 @@ export class ListdetailComponent implements OnInit {
       private route: ActivatedRoute,
       private listSVC: ListtodoService,
       private todoSVC: TodoService,
-      private location: Location
+      private location: Location,
+      private Bert: BertService
   ) { }
 
   ngOnInit() {
@@ -37,16 +39,19 @@ export class ListdetailComponent implements OnInit {
   }
   getList(){
       const id = this.route.snapshot.paramMap.get("listId");
+      this.Bert.sendMessage('List loads '+id, 'success');
       this.listSVC.getList(id).subscribe((list: any)=>{
-          if(list.hasOwnProperty('obj'))
-            this.list = list.obj.docs[0];
+          if(list != undefined)
+            this.list = list.obj.docs[0], this.Bert.sendMessage('List loaded '+id, 'success');
+          else
+            this.Bert.sendMessage('It is not exist list with id: '+id, 'danger');
       });
   }
   getTodos(){
       const id = this.route.snapshot.paramMap.get("listId");
       this.todoSVC.setnbPage(this.nbPage);
       this.todoSVC.getTodosListId(id, "listdetail").subscribe((todos: any)=>{
-          if(todos.hasOwnProperty('obj')){
+          if(todos != undefined){
               this.todos = todos.obj.docs;
               this.nbTotal = todos.obj.pages;
           }

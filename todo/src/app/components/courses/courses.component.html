@@ -11,7 +11,7 @@
         </tr>
         <tr *ngFor="let course of courses">
             <td contenteditable='true' (keypress)="updateCell($event, course)" class="text-left col-xs-2 courseTitle">{{course.title}}</td>
-            <td contenteditable='true' (keypress)="updateCell($event, course)" class="text-left col-xs-6 courseDesc">{{course.desc}}</td>
+            <td contenteditable='true' (keypress)="updateCell($event, course)" class="text-left col-xs-6 courseDesc" [innerHTML]="course.desc"></td>
             <td class="text-left col-xs-3 todo-done" >
                 <a *ngIf="course.files?.length" class="btn btn-success" routerLink="/listscourses/{{course.idListCourses}}/course/{{course._id}}">
                     {{course.files.length}} fichiers, Voir les fichiers
@@ -37,7 +37,7 @@
         </div>
         <div class="form-group">
             <label>Description du cours:</label>
-            <textarea class="form-control" [(ngModel)]="courseInp.desc" rows="5" cols="50"></textarea>
+            <ngx-wig [(ngModel)]="courseInp.desc"></ngx-wig>
         </div>
         <button class="btn btn-primary" (click)="add(courseInp)" name="button">Ajouter</button>
     </div>

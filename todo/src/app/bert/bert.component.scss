@@ -1,0 +1,22 @@
+.header{
+    z-index: 1031;
+    position:fixed;
+    left:0px;
+    top:0px;
+    height:auto;
+    width:100%;
+    padding: 10px;
+    font-weight: bolder;
+}
+
+.success{
+    background-color: #28a745;
+    color: white;
+    opacity: 0.95;
+}
+
+.danger{
+    background-color: #dc3545;
+    color: white;
+    opacity: 0.95;
+}

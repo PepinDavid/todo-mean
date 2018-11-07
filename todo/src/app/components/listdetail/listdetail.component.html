@@ -31,7 +31,7 @@
         <button type="button" name="button" (click)="nextPage()">Next</button>
 
     </div>
-    <div class="add-todo">
+    <div class="col-xs-12">
         <legend>Ajouter d'une tâche</legend>
         <div class="form-group">
             <label>Titre Todo: </label>
@@ -39,7 +39,7 @@
         </div>
         <div class="form-group">
             <label>Description Todo:</label>
-            <textarea class="form-control" [(ngModel)]="todo.desc" rows="5" cols="50"></textarea>
+            <ngx-wig   [(ngModel)]="todo.desc"></ngx-wig>
         </div>
         <button class="btn btn-primary" (click)="add(todo)" name="button">Ajouter</button>
     </div>

@@ -11,7 +11,7 @@
             </div>
             <div class="form-group">
                 <label>Description du cours:</label>
-                <textarea class="form-control" [(ngModel)]="courseInp.desc" rows="5" cols="50"></textarea>
+                <ngx-wig [(ngModel)]="courseInp.desc" rows="5" cols="50"></ngx-wig>
             </div>
             <button class="btn btn-primary btn-block" (click)="updateCourse()" name="button">Modifier</button>
         </div>
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <button type="button" class="btn btn-success btn-sm btn-block" (click)="uploadFile()">
-                    Envoyer l'image
+                    Envoyer le document
                 </button>
             </div>
         </div>

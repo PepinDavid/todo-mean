@@ -67,9 +67,9 @@ export class CoursesComponent implements OnInit {
       if(el.innerText.trim() == "") return;
       if(el.keyCode == 13){
           if($(el).attr("class").indexOf("courseTitle") > -1)
-              course.title = el.innerText
+              course.title = el.innerText;
           else
-              course.desc = el.innerText;
+              course.desc = el.innerHTML;
 
          this.courseSVC.editCourse(this.listCourses._id, course).subscribe((c)=>{
              console.log(c);

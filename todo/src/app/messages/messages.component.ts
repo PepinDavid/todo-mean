@@ -11,6 +11,11 @@ export class MessagesComponent implements OnInit {
   constructor(private messageSVC: MessagesService) { }
 
   ngOnInit() {
+      this.clearMessage();
   }
-
+  clearMessage(){
+      setInterval(()=>{
+          this.messageSVC.clearMessage();
+      },10000)
+  }
 }

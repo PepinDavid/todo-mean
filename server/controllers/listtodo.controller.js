@@ -32,7 +32,6 @@ exports.getListTodo = async function(req, res, next){
     if(token){
         try{
             var lists = await ListTodoSvc.getListTodo({_id: req.params.listId}, page, limit);
-
             return res.status(200).json({status: 200, obj: lists, message: "Successfully loaded lists"});
         }catch(e){
             return res.status(400).json(ERROR(e))
